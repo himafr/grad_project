@@ -1,0 +1,27 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "SET NODE_ENV=development& nodemon server.js",
+    "start:prod": "SET NODE_ENV=production& nodemon server.js ",
+    "debug": "ndb server.js"
+  },
+  "author": "hima",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.3",
+    "pdf-poppler": "^0.2.1",
+    "serve-favicon": "^2.5.0",
+    "validator": "^13.12.0"
+  }
+}
