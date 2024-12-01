@@ -1,9 +1,9 @@
 
-const mysql1= require( 'mysql');
+const mysql= require( 'mysql');
 var mysql= require( 'mysql2');
-if(process.env.NODE_ENV === 'production'){
-mysql=mysql1;
-}
+// if(process.env.NODE_ENV === 'production'){
+// mysql=mysql1;
+// }
 class DatabaseClass {
   constructor() {
     this.connection = undefined;
@@ -26,7 +26,7 @@ class DatabaseClass {
   }
 
   setConfig() {
-    if(process.env.NODE_ENV === 'production'){
+    // if(process.env.NODE_ENV === 'production'){
       this.config = {
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -34,15 +34,15 @@ class DatabaseClass {
         database: process.env.DB_NAME,
         port: process.env.DB_PORT,
       };
-      }else{
-        this.config = {
-          host: process.env.DB_HOST2,
-          user: process.env.DB_USER2,
-          password: process.env.DB_PASSWORD2,
-          database: process.env.DB_NAME,
-          port: process.env.DB_PORT2,
-        };
-      }
+      // }else{
+      //   this.config = {
+      //     host: process.env.DB_HOST2,
+      //     user: process.env.DB_USER2,
+      //     password: process.env.DB_PASSWORD2,
+      //     database: process.env.DB_NAME,
+      //     port: process.env.DB_PORT2,
+      //   };
+      // }
     
   }
 
