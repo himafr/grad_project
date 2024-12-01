@@ -6,9 +6,8 @@ const router=express.Router()
 router
 .route("/")
 .get(bookController.getAllBooks)
-.post(authController.restrictTo("admin"), pdfMaker.bookUpload.single('pdf'),
+.post(authController.restrictTo("admin"), pdfMaker.bookUpload.fields([{name:"pdf",maxCount:1},{name:"image",maxCount:1}]),
 pdfMaker.check
-,pdfMaker.img
 ,bookController.createBook);
 router
 .route("/:id")

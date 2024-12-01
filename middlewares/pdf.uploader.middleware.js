@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
   })
   const fileFilter = (req, file, cb) => {
      // Accept PDFs only
-    if (file.mimetype === 'application/pdf' ) {
+    if (file.mimetype === 'application/pdf'||file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' ) {
       cb(null, true); } 
     else {
       cb(new Error('Unsupported file type! Only PDFs are allowed.'), false); } 
@@ -38,7 +38,8 @@ exports.img=(req,res,next)=>{
           console.error('Error converting PDF to image:', err); })
   }
 exports.check=(req,res,next)=>{
-  if(!req.file)next (new AppError('No file uploaded!',400))
+  console.log(req.files)
+  if(!req.files)next (new AppError('No file uploaded!',400))
   if(!isAvailable(req.body,Object.values(bookRequiredFields)))next (new AppError(' book required fields not provided'))
   next()
 }

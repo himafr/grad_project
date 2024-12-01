@@ -50,9 +50,7 @@ module.exports=(err,req,res,next)=>{
     err.status=err.status || "Error"
     err.statusCode=err.statusCode ||500
 
-    if(process.env.NODE_ENV ==='development'){
-        sendErrorDev(err,res)
-    }else if(process.env.NODE_ENV === 'production'){
+    if(process.env.NODE_ENV ==='production'){
         let error ={...err ,name:err.name,errmsg:err.errmsg}
         if(error.name==="CastError") error = handleCastError(error);
         if(error.code===11000) error=handleDuplicateFieldsDB(error);
@@ -60,5 +58,7 @@ module.exports=(err,req,res,next)=>{
         if(error.name==="JsonWebTokenError") error = handleJsonWebTokenError();      
         if(error.name==="TokenExpiredError") error = handleTokenExpiredError();      
         sendErrorPro(error,res)
+    }else {
+        sendErrorDev(err,res)
     }
 }

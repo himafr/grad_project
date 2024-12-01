@@ -54,10 +54,9 @@ class BookController {
    */
   static async createBook(req, res, next) {
     const { body: requestBody } = req;
-    requestBody.book_url = req.file?.path;
+    requestBody.book_url = req.files.pdf[0].path;
 
-    const photoPath =
-      req.file.path.toString().split(".").slice(0, -1).join("") + "-01.png";
+    const photoPath =req.files.image[0].path;
     requestBody.book_photo = photoPath;
     try {
       const Result = await BooksModel.createBook(requestBody);
