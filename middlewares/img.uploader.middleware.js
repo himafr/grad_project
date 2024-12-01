@@ -1,4 +1,3 @@
-const poppler = require('pdf-poppler');
 const multer  = require('multer')
 const fs= require('fs')
 const path = require('path');

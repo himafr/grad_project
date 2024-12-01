@@ -1,4 +1,4 @@
-const poppler = require('pdf-poppler');
+const PDFImage = require("pdf-image").PDFImage;
 const multer  = require('multer')
 const fs= require('fs')
 const path = require('path');
@@ -33,17 +33,8 @@ exports.bookUpload = multer({ storage:storage,
   limits: { fileSize: 1024 * 1024 * 5 }})
 
 exports.img=(req,res,next)=>{
-  const options = {
-      format: 'png',
-      out_dir: './'+req.file.path.split("\\").slice(0,-1).join("/"),
-      out_prefix: path.basename(req.file.filename.split('.').slice(0,-1).join(''), '.png'),
-      page: 1,
-      poppler_path: './'
-  }; 
-  
-   poppler.convert(req.file.path, options).then(()=>{
-       next();
-   }).catch(err=>{
+  const pdfImage = new PDFImage(req.file.path);
+  pdfImage.convertPage(0).then(function (imagePath) { console.log("First page converted to:", imagePath); }).catch(err=>{
           console.error('Error converting PDF to image:', err); })
   }
 exports.check=(req,res,next)=>{
