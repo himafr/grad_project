@@ -49,7 +49,8 @@ app.use(morgan('dev'))
 //     }
     
 // })
-app.get("/ttt", protect,(req,res)=>{
+
+app.get("/", protect,(req,res)=>{
     res.send("Hello world");
 })
 app.use("/api/v1/users",userRoute);
