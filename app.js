@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser'); 
 const favicon = require('serve-favicon');
 const path = require('path');
+const cors=require('cors');
 const app = express();
 const userRoute=require('./router/user.routes')
 const bookRoute=require('./router/book.routes')
@@ -14,6 +15,7 @@ const { protect } = require("./controllers/auth.controller");
 
 // middlewares 
 // Parse application/x-www-form-urlencoded
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
@@ -54,9 +56,9 @@ app.get("/", protect,(req,res)=>{
     res.send("Hello world");
 })
 app.use("/api/v1/users",userRoute);
-// app.use("/api/v1/meds",protect,
-//     medRoute
-// );
+app.use("/api/v1/meds",protect,
+    medRoute
+);
 app.use("/api/v1/books",protect,bookRoute);
 
 app.all("*",(req,res,next)=>{

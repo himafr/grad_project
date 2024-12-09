@@ -1,6 +1,6 @@
 
-const mysql= require( 'mysql');
-// var mysql= require( 'mysql2');
+// const mysql= require( 'mysql');
+const mysql= require( 'mysql2');
 // if(process.env.NODE_ENV === 'production'){
 // mysql=mysql1;
 // }

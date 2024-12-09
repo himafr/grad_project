@@ -1,4 +1,5 @@
 const {Database}=require("./config/db.config")
+
 // process.on('uncaughtException',err=>{
 //     console.log("UNCAUGHT EXCEPTION!!!",err.message);
 //     process.exit(1)  

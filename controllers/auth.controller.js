@@ -52,11 +52,11 @@ const { findUserByAttribute } = require("../models/auth.model.js");
     try {
       const {user,token:access_token}= await AuthService.signUpUser(requestBody);
 
-      
+      saveCookie(res, cookieAttributeForJwtToken, access_token);
       res.status(STATUS_CODES.SUCCESSFULLY_CREATED).json({status:"success", message:  "The user signed up successfully",
         token: access_token,
         data:{
-          userId: user.id,
+          userId: user.user_id,
           username: user.username,
       }
       });
@@ -165,8 +165,8 @@ const { findUserByAttribute } = require("../models/auth.model.js");
     // 2) verification token
     const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     //3) check if user still exist
-    
-    const freshUser = await findUserByAttribute('id',decode.userId);
+   console.log (decode)
+    const freshUser = await findUserByAttribute('user_id',decode.userId);
     if (!freshUser) {
       return next(new AppError("user no longer exist", 401));
     }

@@ -11,7 +11,7 @@ class MedsModel {
   }
 
   static async getMedById(id) {
-    const sql = "SELECT * FROM meds WHERE id = ?";
+    const sql = "SELECT * FROM meds WHERE med_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
     return result[0];
@@ -27,7 +27,7 @@ class MedsModel {
   }
   static async updateMed(updatedData, id) {
     try {
-      const sql = `UPDATE meds SET ? WHERE id=?`;
+      const sql = `UPDATE meds SET ? WHERE med_id=?`;
       const params = [updatedData, id];
       const result = await Database.executeQuery(sql, params);
       return result;
@@ -37,7 +37,7 @@ class MedsModel {
   }
   static async deleteMed(id) {
     try {
-      const sql = `DELETE FROM meds WHERE id=?`;
+      const sql = `DELETE FROM meds WHERE med_id=?`;
       const params = [id];
       const result = await Database.executeQuery(sql, params);
       return result;

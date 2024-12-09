@@ -1,10 +1,12 @@
 -- DROP DATABASE IF EXISTS diabetes_db;
-DROP DATABASE IF EXISTS souq;
+DROP DATABASE IF EXISTS diabetes_db;
 
-CREATE DATABASE souq;
-USE souq;
+CREATE DATABASE diabetes_db;
+USE diabetes_db;
+
+
 CREATE TABLE IF NOT EXISTS users(
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(400) NOT NULL,
     passwordChangedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -13,17 +15,13 @@ CREATE TABLE IF NOT EXISTS users(
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) DEFAULT 'not set',
     number VARCHAR(50) DEFAULT 'not set',
-    email VARCHAR(255) NOT NULL DEFAULT 'not set',
     photo VARCHAR(255) DEFAULT 'not set',
-    address VARCHAR(255) NOT NULL DEFAULT 'not set',
-    city VARCHAR(150) NOT NULL DEFAULT 'not set',
-    country VARCHAR(100) NOT NULL DEFAULT 'not set',
     date_of_birth DATE NOT NULL,
     map_link VARCHAR(255) NOT NULL DEFAULT 'not set'
 );
 
 CREATE TABLE IF NOT EXISTS books(
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    book_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     book_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     book_title VARCHAR(50) NOT NULL,
     book_desc VARCHAR(500) NOT NULL DEFAULT 'not set',
@@ -31,18 +29,18 @@ CREATE TABLE IF NOT EXISTS books(
     book_url VARCHAR(255) NOT NULL DEFAULT 'not set',
     book_photo VARCHAR(255) NOT NULL DEFAULT 'not set',
     doctor_id INT NOT NULL ,
-    FOREIGN KEY (doctor_id) REFERENCES users(id)
+    FOREIGN KEY (doctor_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS meds(
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    med_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     med_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     med_name VARCHAR(50) NOT NULL,
     med_price INTEGER not NULL,
     med_photo VARCHAR(255) NOT NULL DEFAULT 'not set',
     med_summary VARCHAR(500) NOT NULL DEFAULT 'not set',
     pharm_id INT NOT NULL ,
-    FOREIGN KEY (pharm_id) REFERENCES users(id)
+    FOREIGN KEY (pharm_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -56,6 +54,8 @@ CREATE TABLE IF NOT EXISTS recipes (
     instructions TEXT,
     recipe_carb INT NOT NULL ,
     category_id INT,
+    admin_id INT,
+    FOREIGN KEY (recipe_id) REFERENCES users(user_id )
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
@@ -73,4 +73,23 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id),
     PRIMARY KEY (recipe_id, ingredient_id)
 );
+
+CREATE TABLE chats (
+    chat_id INT AUTO_INCREMENT PRIMARY KEY,
+    chat_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    chat_id INT,
+    message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
+);
+
+
+--reports
+
 

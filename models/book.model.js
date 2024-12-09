@@ -11,7 +11,7 @@ class BooksModel {
   }
 
   static async getBookById(id) {
-    const sql = "SELECT * FROM books WHERE id = ?";
+    const sql = "SELECT * FROM books WHERE book_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
     return result[0];

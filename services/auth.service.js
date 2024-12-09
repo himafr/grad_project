@@ -17,9 +17,8 @@ exports.signUpUser = async (obj) => {
   const hashPassword = await getHashPassword(password);
   await AuthModel.createUser({...obj,password: hashPassword});
   const user = await AuthModel.findUserByAttribute("username", username);
-
   const jwtPayload = {
-    userId: user.id,
+    userId: user.user_id,
     username: user.username,
   };
 
@@ -42,7 +41,7 @@ exports.logInUser = async (username, password) => {
 
     if (authCheck) {
       const jwtPayload = {
-        userId: user.id,
+        userId: user.user_id,
         username: user.username,
       };
 

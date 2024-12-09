@@ -56,7 +56,7 @@ class MedController {
     console.log(req.body)
     const { body: requestBody } = req;
     requestBody.med_photo = req.file?.path||'not found';
-    console.log(req.body)
+    requestBody.pharm_id = req.user.userId;
     try {
       const Result = await medsModel.createMed(requestBody);
 
