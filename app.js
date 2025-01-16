@@ -21,12 +21,16 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 app.use('/uploads',express.static(`uploads`))
-// app.use((req,res,next)=>{
-//   req.dateTime=new Date().toLocaleTimeString();
-//   next();
-// });
-app.use(morgan('dev'))
 
+app.use(morgan('dev'))
+// app.use((req,res,next)=>{
+
+//     console.log("jhefjdjfdjkfdkdfjkdfjkdfjkdfjkjkdfjkdfjkdfjkdfjkdfjkdfjkjkdfjkdf")
+//     console.log(req.body)
+//     // setTimeout(next,5000)
+//     next();
+// })
+  
 //Routes
 // app.get('/as',async(req,res)=>{
 //     try{

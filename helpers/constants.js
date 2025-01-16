@@ -27,7 +27,6 @@ exports.cookieAttributeForJwtToken = 'jwt_token';
 
 exports.bookRequiredFields = {
   BOOK_TITLE: 'book_title',
-  DOCTOR_ID:'doctor_id',
 }
 
 exports.medicineRequiredFields = {

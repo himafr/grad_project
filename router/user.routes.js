@@ -5,9 +5,10 @@ const router=express.Router()
 
 router.post('/signup',authController.registerUser)
 router.post('/login',authController.loginUser)
+
 router
 .route("/")
-.get(authController.restrictTo("admin"),userController.getAllUsers)
+.get(authController.protect, authController.restrictTo("admin"),userController.getAllUsers)
 .post(userController.createUser);
 
 router

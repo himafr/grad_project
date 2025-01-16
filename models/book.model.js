@@ -1,8 +1,9 @@
 const { Database } = require("../config/db.config");
 class BooksModel {
-  static async getAllBooks() {
+  static async getAllBooks(query) {
     try {
-      const sql = "SELECT * FROM books";
+      const sql = `SELECT * FROM books
+      LIMIT ${query.limit} OFFSET ${query.page*query.limit}`;
       const result = await Database.executeQuery(sql);
       return result;
     } catch (err) {

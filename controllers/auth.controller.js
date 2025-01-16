@@ -190,6 +190,7 @@ const { findUserByAttribute } = require("../models/auth.model.js");
 
   exports.restrictTo = (...value) => {
     return (req, res, next) => {
+      console.log(req.user)
       if (!value.includes(req.user.role)) {
         return next(
           new AppError("you don't have permission to perform this action"),

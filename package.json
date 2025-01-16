@@ -1,5 +1,5 @@
 {
-  "name": "natours",
+  "name": "diabetes care",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -9,7 +9,6 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "start:prod": "SET NODE_ENV=production& nodemon server.js ",
     "debug": "ndb server.js"
   },
   "author": "hima",

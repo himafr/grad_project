@@ -14,7 +14,6 @@ const handleValidationError=err=>{
     // const message = message.length > 0? message.join('. ') : 'Invalid input data.'
     return new AppError(message.join('. '),400)
 }
-
 const handleJsonWebTokenError=()=>{
     const message = `Invalid data. Please login again.`
     return new AppError(message,401)

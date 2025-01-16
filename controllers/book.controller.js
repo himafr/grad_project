@@ -21,7 +21,12 @@ class BookController {
    */
   static async getAllBooks(req, res, next) {
     try {
-      const books = await BooksModel.getAllBooks();
+      let {query} = req;
+      console.log(query)
+      query.limit= query.limit||6;
+      if(query.page<0)
+        return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+      const books = await BooksModel.getAllBooks(req.query);
 
       if (!books.length)
         return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
@@ -55,9 +60,11 @@ class BookController {
   static async createBook(req, res, next) {
     const { body: requestBody } = req;
     requestBody.book_url = req.files.pdf[0].path;
-
     const photoPath =req.files.image[0].path;
     requestBody.book_photo = photoPath;
+    requestBody.admin_id = req.user.user_id;
+    console.log(req.user.user_id);
+    // requestBody.admin_id = req.user.id;
     try {
       const Result = await BooksModel.createBook(requestBody);
 

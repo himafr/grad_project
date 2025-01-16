@@ -11,14 +11,14 @@ const {
 } =require( "../helpers/utils.js");
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function (req, file, cb) { 
         const date = new Date();
         const dir=`./uploads/books/${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`
         fs.mkdir(dir,{recursive:true},
             (err)=>{cb(null, dir) }    )
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now().toString()+"@"+req.user?.id+path.extname(file.originalname)) 
+      cb(null, Date.now().toString()+"@"+req.user?.user_id+path.extname(file.originalname)) 
     }
   })
   const fileFilter = (req, file, cb) => {
@@ -30,7 +30,8 @@ const storage = multer.diskStorage({
     };
 exports.bookUpload = multer({ storage:storage,
   fileFilter:fileFilter,
-  limits: { fileSize: 1024 * 1024 * 5 }})
+  limits: { fileSize: 1024 * 1024 * 5 }
+})
 
 exports.img=(req,res,next)=>{
   const pdfImage = new PDFImage(req.file.path);
@@ -38,8 +39,7 @@ exports.img=(req,res,next)=>{
           console.error('Error converting PDF to image:', err); })
   }
 exports.check=(req,res,next)=>{
-  console.log(req.files)
   if(!req.files)next (new AppError('No file uploaded!',400))
   if(!isAvailable(req.body,Object.values(bookRequiredFields)))next (new AppError(' book required fields not provided'))
   next()
-}
+} 

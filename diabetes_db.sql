@@ -1,4 +1,3 @@
--- DROP DATABASE IF EXISTS diabetes_db;
 DROP DATABASE IF EXISTS diabetes_db;
 
 CREATE DATABASE diabetes_db;
@@ -28,8 +27,8 @@ CREATE TABLE IF NOT EXISTS books(
     book_summary VARCHAR(500) NOT NULL DEFAULT 'not set',
     book_url VARCHAR(255) NOT NULL DEFAULT 'not set',
     book_photo VARCHAR(255) NOT NULL DEFAULT 'not set',
-    doctor_id INT NOT NULL ,
-    FOREIGN KEY (doctor_id) REFERENCES users(user_id)
+    admin_id INT NOT NULL ,
+    FOREIGN KEY (admin_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS meds(
@@ -55,7 +54,7 @@ CREATE TABLE IF NOT EXISTS recipes (
     recipe_carb INT NOT NULL ,
     category_id INT,
     admin_id INT,
-    FOREIGN KEY (recipe_id) REFERENCES users(user_id )
+    FOREIGN KEY (recipe_id) REFERENCES users(user_id ),
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
@@ -90,6 +89,6 @@ CREATE TABLE Messages (
 );
 
 
---reports
+
 
 
