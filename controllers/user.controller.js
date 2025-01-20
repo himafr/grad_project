@@ -1,87 +1,146 @@
-// const User= require('../models/user.model')
-const catchAsync=require('../utils/catchAsync')
+const AuthModel = require("../models/auth.model.js");
+const AppError = require("../utils/appError");
+const fs = require("fs");
+const path = require("path");
+const {
+  STATUS_CODES,
+  cookieAttributeForJwtToken,
+  dbErrorCodes,
+  userAuthRequiredFields,
+} = require("../helpers/constants.js");
+const { request } = require("express");
+const UserModel = require("../models/user.model.js");
 
-exports.getAllUsers=catchAsync(async(req,res)=>{
-    const users= await User.find()
- res.status(500).json({
-     status: "success",
-     message: {
-        users
-     }
- })
-})
-exports.createUser=(req,res)=>{
- res.status(500).json({
-     status: "error",
-     message: "This route is not yet defined"
- })
+class UserController {
+  
+  /**
+   * @description
+   * the controller method to fetch a user corresponding to an id
+   * @param {object} req the request object
+   * @param {object} res the response object
+   * @param {object} next the next middleware function in the application’s request-response cycle
+   * @returns the user fetched from the database
+   */
+
+  static async cover(req, res, next) {
+    const userId = req.user.user_id;
+    const photoToBeDeleted = await AuthModel.findUserByAttribute("user_id",userId)
+    try{
+      await fs.unlinkSync(photoToBeDeleted.cover_photo);
+    }catch{
+      console.log("easy man")
+    }
+    
+    let data={
+      cover_photo:req.file?.path||'not found'
+    }
+    try {
+      const updateCover = await UserModel.updateUser(data, userId);
+      if (updateCover.affectedRows)
+        return res.status(STATUS_CODES.OK).json({
+      status:  "success",
+      message: `cover has been updated successfully`,
+    });
+    return next(
+      new AppError(
+        `cover could not be updated`,
+        STATUS_CODES.BAD_REQUEST
+      )
+    );
+  } catch (error) {
+    return next(
+      new AppError(
+        error.message || "Internal Server Error",
+        error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+        error.response || error
+      )
+    );
+  }
+  
 }
-exports.findUser=(req,res)=>{
- res.status(500).json({
-     status: "error",
-     message: "This route is not yet defined"
- })
-}
-exports.deleteUser=(req,res)=>{
- res.status(500).json({
-     status: "error",
-     message: "This route is not yet defined"
- })
-}
-exports.updateUser=(req,res)=>{
- res.status(500).json({
-     status: "error",
-     message: "This route is not yet defined"
- })
+static async photo(req, res, next) {
+  const userId = req.user.user_id;
+  const photoToBeDeleted = await AuthModel.findUserByAttribute("user_id",userId)
+  try{
+  await fs.unlinkSync(photoToBeDeleted.photo);
+}catch{
+  console.log("easy man")
 }
 
+    let data={
+      photo:req.file?.path||'not found'
+    }
+    try {
+      const updatePhoto = await UserModel.updateUser(data, userId);
+      if (updatePhoto.affectedRows)
+        return res.status(STATUS_CODES.OK).json({
+          status:  "success",
+          message: `profile photo has been updated successfully`,
+        });
+      return next(
+        new AppError(
+          `profile photo could not be updated`,
+          STATUS_CODES.BAD_REQUEST
+        )
+      );
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+
+  }
+
+  
+  /**
+   * @description
+   * the controller method to fetch a user corresponding to an id
+   * @param {object} req the request object
+   * @param {object} res the response object
+   * @param {object} next the next middleware function in the application’s request-response cycle
+   * @returns the user fetched from the database
+   */
  
-    /**
-     * @description
-     * the controller method to fetch a user corresponding to an id
-     * @param {object} req the request object
-     * @param {object} res the response object
-     * @param {object} next the next middleware function in the application’s request-response cycle
-     * @returns the user fetched from the database
-     */
-    // static async getUserById(req, res, next) {
-    //   const userId = req.params.id;
-  
-    //   try {
-    //     const user = await AuthModel.findUserByAttribute("id", userId);
-  
-    //     if (!user)
-    //       return next(
-    //         new AppError(
-    //           `User with id ${userId} does not exist`,
-    //           STATUS_CODES.NOT_FOUND
-    //         )
-    //       );
-  
-    //     if (user.id !== res.locals.user.id)
-    //       return next(
-    //         new AppError("You are not authorized", STATUS_CODES.FORBIDDEN)
-    //       );
-  
-    //     return sendResponse(
-    //       res,
-    //       STATUS_CODES.OK,
-    //       `User with id ${userId} fetched successfully`,
-    //       {
-    //         id: user.id,
-    //         username: user.username,
-    //       }
-    //     );
-    //   } catch (error) {
-    //     return next(
-    //       new AppError(
-    //         error.message || "Internal Server Error",
-    //         error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
-    //         error.response || error
-    //       )
-    //     );
-    //   }
-    // }
+    static async getUserById(req, res, next) {
+      const userId =req.user.user_id;
+      
+      try {
+          const user = await AuthModel.findUserByAttribute("user_id", userId);
+          
+          if (!user)
+            return next(
+        new AppError(
+            `User with id ${userId} does not exist`,
+            STATUS_CODES.NOT_FOUND
+        )
+    );
+    
+    if (user.user_id !== req.user.user_id){
+        return next(
+            new AppError("You are not authorized", STATUS_CODES.FORBIDDEN)
+        );
+    }
+          res.status(STATUS_CODES.OK).json({
+            status:'success',
+            message:  `User with id ${userId} fetched successfully`,
+            data: {
+              user,
+            }
+      });
+      } catch (error) {
+        return next(
+          new AppError(
+            error.message || "Internal Server Error",
+            error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+            error.response || error
+          )
+        );
+      }
+    }
   
     /**
      * @description
@@ -201,4 +260,5 @@ exports.updateUser=(req,res)=>{
     //       )
     //     );
     //   }
-    // }
+    }
+module.exports =UserController;

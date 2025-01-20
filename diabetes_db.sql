@@ -15,21 +15,28 @@ CREATE TABLE IF NOT EXISTS users(
     last_name VARCHAR(50) DEFAULT 'not set',
     number VARCHAR(50) DEFAULT 'not set',
     photo VARCHAR(255) DEFAULT 'not set',
+    cover_photo VARCHAR(255) DEFAULT 'not set',
     date_of_birth DATE NOT NULL,
+    email VARCHAR(255) DEFAULT 'not set',
+    address VARCHAR(255) DEFAULT 'not set',
     map_link VARCHAR(255) NOT NULL DEFAULT 'not set'
 );
+
 
 CREATE TABLE IF NOT EXISTS books(
     book_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     book_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     book_title VARCHAR(50) NOT NULL,
-    book_desc VARCHAR(500) NOT NULL DEFAULT 'not set',
-    book_summary VARCHAR(500) NOT NULL DEFAULT 'not set',
+    book_desc VARCHAR(2000) NOT NULL DEFAULT 'not set',
+    book_summary VARCHAR(1500) NOT NULL DEFAULT 'not set',
     book_url VARCHAR(255) NOT NULL DEFAULT 'not set',
     book_photo VARCHAR(255) NOT NULL DEFAULT 'not set',
     admin_id INT NOT NULL ,
     FOREIGN KEY (admin_id) REFERENCES users(user_id)
 );
+
+-- book likes 
+-- book comments 
 
 CREATE TABLE IF NOT EXISTS meds(
     med_id INTEGER PRIMARY KEY AUTO_INCREMENT,

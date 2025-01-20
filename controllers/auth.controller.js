@@ -165,7 +165,6 @@ const { findUserByAttribute } = require("../models/auth.model.js");
     // 2) verification token
     const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     //3) check if user still exist
-   console.log (decode)
     const freshUser = await findUserByAttribute('user_id',decode.userId);
     if (!freshUser) {
       return next(new AppError("user no longer exist", 401));

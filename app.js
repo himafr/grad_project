@@ -24,11 +24,7 @@ app.use('/uploads',express.static(`uploads`))
 
 app.use(morgan('dev'))
 // app.use((req,res,next)=>{
-
-//     console.log("jhefjdjfdjkfdkdfjkdfjkdfjkdfjkjkdfjkdfjkdfjkdfjkdfjkdfjkjkdfjkdf")
-//     console.log(req.body)
-//     // setTimeout(next,5000)
-//     next();
+//     setTimeout(next,5000)
 // })
   
 //Routes
