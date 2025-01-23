@@ -10,6 +10,9 @@ router
 pdfMaker.check
 ,bookController.createBook);
 router
+.route("/admin")
+.get(bookController.getAdminBooks)
+router
 .route("/:id")
 .get(bookController.getBookById)
 .patch(authController.restrictTo("admin"), bookController.updateBook)

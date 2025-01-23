@@ -26,16 +26,57 @@ class BookController {
       query.limit= query.limit||6;
       if(query.page<0)
         return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
-      const books = await BooksModel.getAllBooks(req.query);
-
+      const [books,nums] = await BooksModel.getAllBooks(req.query);
       if (!books.length)
         return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+      
 
-      res.status(STATUS_CODES.OK).json({
+      return res.status(STATUS_CODES.OK).json({
         status: "success",
         message: "All books fetched successfully",
         data: {
           books,
+          nums,
+        },
+      });
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
+  /**
+   * @description
+   * the controller method to fetch all books for a particular user
+   * @param {object} req the request object
+   * @param {object} res the response object
+   * @param {object} next the next middleware function in the application’s request-response cycle
+   * @returns the array of books for the user
+   */
+  static async getAdminBooks(req, res, next) {
+    try {
+      let {query} = req;
+      let admin_id=req.user.user_id;
+      console.log(query)
+      console.log(admin_id)
+      query.limit= query.limit||6;
+      if(query.page<0)
+        return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+      const [books,nums] = await BooksModel.getAdminBooks(req.query,admin_id);
+      if (!books.length)
+        return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+      
+
+      return res.status(STATUS_CODES.OK).json({
+        status: "success",
+        message: "All books fetched successfully",
+        data: {
+          books,
+          nums,
         },
       });
     } catch (error) {
@@ -135,8 +176,9 @@ class BookController {
    */
   static async updateBook(req, res, next) {
     const { body: requestBody } = req;
-
     const bookId = req.params.id;
+    console.log(bookId)
+
     try {
       const bookToBeUpdated = await BooksModel.getBookById(bookId);
 
@@ -148,7 +190,7 @@ class BookController {
           )
         );
 
-      if (bookToBeUpdated.doctor_id !== req.user.id)
+      if (bookToBeUpdated.admin_id !== req.user.user_id)
         return next(
           new AppError("You are not authorized", STATUS_CODES.FORBIDDEN)
         );

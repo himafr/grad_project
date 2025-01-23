@@ -49,6 +49,8 @@ CREATE TABLE IF NOT EXISTS meds(
     FOREIGN KEY (pharm_id) REFERENCES users(user_id)
 );
 
+
+--recipe
 CREATE TABLE IF NOT EXISTS categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50)
@@ -80,6 +82,10 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
     PRIMARY KEY (recipe_id, ingredient_id)
 );
 
+
+
+
+--chats 
 CREATE TABLE chats (
     chat_id INT AUTO_INCREMENT PRIMARY KEY,
     chat_name VARCHAR(50) NOT NULL

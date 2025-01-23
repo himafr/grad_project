@@ -17,6 +17,6 @@ router.post('/photo',  authController.protect ,midImg.imgUpload.single("photo"),
 router
 .route("/:id")
 .get(authController.protect,userController.getUserById)
-// .patch(userController.updateUser)
+.patch(authController.protect,userController.updateUser)
 // .delete(userController.deleteUser);
 module.exports=router

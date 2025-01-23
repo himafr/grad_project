@@ -149,65 +149,50 @@ static async photo(req, res, next) {
      * @param {object} res the response object
      * @param {object} next the next middleware function in the application’s request-response cycle
      */
-    // static async updateUser(req, res, next) {
-    //   const { body: requestBody } = req;
+    static async updateUser(req, res, next) {
+      const { body: requestBody } = req;
+      
+      const userId = req.user.user_id;
+      
+      try {
+        const user = await AuthModel.findUserByAttribute("user_id", userId);
+        
+        if (!user)
+          return next(
+        new AppError(
+          `User with id ${userId} does not exist`,
+          STATUS_CODES.NOT_FOUND
+        )
+      );
+      console.log(req.body)
+    
+        const updateUserResult = await UserModel.updateUser(requestBody, userId);
   
-    //   const fieldsToBeUpdatedExist = isAvailable(
-    //     requestBody,
-    //     Object.values(userUpdateFields),
-    //     false
-    //   );
-  
-    //   if (!fieldsToBeUpdatedExist)
-    //     return next(
-    //       new AppError(
-    //         "Fields to be updated does not exist",
-    //         STATUS_CODES.BAD_REQUEST
-    //       )
-    //     );
-  
-    //   const userId = req.params.id;
-  
-    //   try {
-    //     const user = await AuthModel.findUserByAttribute("id", userId);
-  
-    //     if (!user)
-    //       return next(
-    //         new AppError(
-    //           `User with id ${userId} does not exist`,
-    //           STATUS_CODES.NOT_FOUND
-    //         )
-    //       );
-  
-    //     if (user.id !== res.locals.user.id)
-    //       return next(
-    //         new AppError("You are not authorized", STATUS_CODES.FORBIDDEN)
-    //       );
-  
-    //     const updateUserResult = await BooksModel.updateUser(requestBody, userId);
-  
-    //     if (updateUserResult.affectedRows)
-    //       return sendResponse(
-    //         res,
-    //         STATUS_CODES.OK,
-    //         `User with id ${userId} updated successfully`
-    //       );
-    //     return next(
-    //       new AppError(
-    //         `User with id ${userId} could not be updated`,
-    //         STATUS_CODES.BAD_REQUEST
-    //       )
-    //     );
-    //   } catch (error) {
-    //     return next(
-    //       new AppError(
-    //         error.message || "Internal Server Error",
-    //         error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
-    //         error.response || error
-    //       )
-    //     );
-    //   }
-    // }
+        if (updateUserResult.affectedRows)
+          return res.status(STATUS_CODES.OK).json({
+          status:'success',
+          message:   `User with id ${userId} updated successfully`,
+          data: {
+            user,
+          }
+    });
+        
+        return next(
+          new AppError(
+            `User with id ${userId} could not be updated`,
+            STATUS_CODES.BAD_REQUEST
+          )
+        );
+      } catch (error) {
+        return next(
+          new AppError(
+            error.message || "Internal Server Error",
+            error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+            error.response || error
+          )
+        );
+      }
+    }
   
     /**
      * @description

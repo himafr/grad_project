@@ -53,7 +53,6 @@ class MedController {
    * @returns the created blog for the user
    */
   static async createMed(req, res, next) {
-    console.log(req.body)
     const { body: requestBody } = req;
     requestBody.med_photo = req.file?.path||'not found';
     requestBody.pharm_id = req.user.userId;

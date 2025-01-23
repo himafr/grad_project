@@ -23,9 +23,9 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/uploads',express.static(`uploads`))
 
 app.use(morgan('dev'))
-// app.use((req,res,next)=>{
-//     setTimeout(next,5000)
-// })
+app.use((req,res,next)=>{
+    setTimeout(next,3000)
+})
   
 //Routes
 // app.get('/as',async(req,res)=>{
