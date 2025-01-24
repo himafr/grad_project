@@ -1,5 +1,5 @@
 const multer  = require('multer')
-const fs= require('fs')
+const fs= require('fs-extra')
 const path = require('path');
 const AppError = require('../utils/appError.js');
 const {
@@ -12,13 +12,12 @@ const {
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const date = new Date();
-        // /uploads/profile/${date.getFullYear()}/${date.getMonth()}/${date.getDate()}
-        const dir=`/temp`
+        const dir=`/uploads/profile/${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`
         fs.mkdir(dir,{recursive:true},
             (err)=>{cb(null, dir) }    )
     },
     filename: function (req, file, cb) {
-      console.log(req.user.user_id)
+      console.log(req.user)
       cb(null, Date.now().toString()+"@"+req.user?.user_id+path.extname(file.originalname)) 
     }
   })
