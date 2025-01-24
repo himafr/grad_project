@@ -34,6 +34,7 @@ app.get('/tmp/:id', (req, res) => {
     });
   });
 // app.use(morgan('dev'))
+const multer = require('multer');
 const upload = multer({ dest: 'pp/' });
 
 // Endpoint to handle file uploads
