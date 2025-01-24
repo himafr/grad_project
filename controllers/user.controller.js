@@ -61,9 +61,11 @@ class UserController {
 static async photo(req, res, next) {
   const userId = req.user.user_id;
   const photoToBeDeleted = await AuthModel.findUserByAttribute("user_id",userId)
-  if (photoToBeDeleted.photo != "not set"){
-    await fs.unlinkSync(photoToBeDeleted.photo);
-  }
+//   try{
+//   await fs.unlinkSync(photoToBeDeleted.photo);
+// }catch{
+//   console.log("easy man")
+// }
 
     let data={
       photo:req.file?.path||'not found'
