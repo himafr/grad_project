@@ -22,7 +22,7 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 app.get('/tmp/:id',(req,res)=>{
-    const filePath = path.join(__dirname, 'tmp', req.params.id);
+    const filePath = path.join( 'tmp', req.params.id);
 console.log(filePath)
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
