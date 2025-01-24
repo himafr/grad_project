@@ -21,7 +21,16 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
-app.get('/tmp/:id', (req, res) => {
+app.get('/tmp/:id', async(req, res) => {
+   
+    try {
+        const files = await fs.readdir('/tmp');
+        console.log('Files in /tmp:', files);
+        res.send(files)
+    } catch (error) {
+        console.error('Error reading directory:', error);
+    
+}
     const filePath = path.join('/tmp', req.params.id);
     console.log(filePath);
   
