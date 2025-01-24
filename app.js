@@ -35,7 +35,8 @@ app.get('/tmp/:id', (req, res) => {
   });
 // app.use(morgan('dev'))
 const multer = require('multer');
-const upload = multer({ dest: 'tmp/' });
+// Set up Multer to handle file uploads and store them in /tmp directory
+const upload = multer({ dest: '/tmp/' });
 
 // Endpoint to handle file uploads
 app.post('/upload', upload.single('file'), (req, res) => {
