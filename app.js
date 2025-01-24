@@ -21,18 +21,18 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
-app.get('/tmp/:id',(req,res)=>{
-    const filePath = path.join( 'tmp', req.params.id);
-console.log(filePath)
+app.get('/tmp/:id', (req, res) => {
+    const filePath = path.join('/tmp', req.params.id);
+    console.log(filePath);
+  
     fs.access(filePath, fs.constants.F_OK, (err) => {
-        if (err) {
-          res.status(404).send('File not found');
-        } else {
-          res.sendFile(filePath);
-        }
-      });
-})
-
+      if (err) {
+        res.status(404).send('File not found');
+      } else {
+        res.sendFile(filePath);
+      }
+    });
+  });
 app.use(morgan('dev'))
 // app.use((req,res,next)=>{
 //     setTimeout(next,3000)
