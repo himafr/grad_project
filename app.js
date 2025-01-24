@@ -46,6 +46,27 @@ app.post('/upload', upload.single('file'), (req, res) => {
         res.status(400).send('No file uploaded.');
     }
 });
+app.get('/file', async (req, res) => {
+  try {
+      const fileName = req.query.name; // Get the file name from query parameters
+      if (!fileName) {
+          return res.status(400).send('File name is required');
+      }
+      const filePath = path.join('/tmp', fileName);
+      const fileExists = await fs.access(filePath).then(() => true).catch(() => false);
+
+      if (!fileExists) {
+          return res.status(404).send('File not found');
+      }
+
+      const fileData = await fs.readFile(filePath);
+      res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+      res.send(fileData);
+  } catch (error) {
+      console.error('Error fetching file:', error);
+      res.status(500).send('Server error');
+  }
+});
 // app.use((req,res,next)=>{
 //     setTimeout(next,3000)
 // })
