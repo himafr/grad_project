@@ -15,11 +15,11 @@ CREATE TABLE IF NOT EXISTS users(
     last_name VARCHAR(50) DEFAULT 'not set',
     number VARCHAR(50) DEFAULT 'not set',
     photo VARCHAR(255) DEFAULT 'not set',
-    cover_photo VARCHAR(255) DEFAULT 'not set',
     date_of_birth DATE NOT NULL,
+    map_link VARCHAR(255) NOT NULL DEFAULT 'not set',
+    cover_photo VARCHAR(255) DEFAULT 'not set',
     email VARCHAR(255) DEFAULT 'not set',
-    address VARCHAR(255) DEFAULT 'not set',
-    map_link VARCHAR(255) NOT NULL DEFAULT 'not set'
+    address VARCHAR(255) DEFAULT 'not set'
 );
 
 

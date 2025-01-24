@@ -62,7 +62,7 @@ static async photo(req, res, next) {
   const userId = req.user.user_id;
   const photoToBeDeleted = await AuthModel.findUserByAttribute("user_id",userId)
   try{
-  await fs.unlinkSync(photoToBeDeleted.photo);
+   fs.unlink(photoToBeDeleted.photo,(err)=>console.log("مفيش صوره"));
 }catch{
   console.log("easy man")
 }
