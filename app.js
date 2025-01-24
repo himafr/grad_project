@@ -12,6 +12,7 @@ const AppError=require('./utils/appError')
 const globalErrorControllers=require('./controllers/error.controller');
 const {Database}=require('./config/db.config');
 const { protect } = require("./controllers/auth.controller");
+const fs = require("fs");
 
 // middlewares 
 // Parse application/x-www-form-urlencoded
@@ -20,7 +21,17 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
-app.use('/tmp',express.static(`${__dirname}/tmp`))
+app.get('/tmp/:id',(req,res)=>{
+    const filePath = path.join(__dirname, 'tmp', req.params.id);
+console.log(filePath)
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+          res.status(404).send('File not found');
+        } else {
+          res.sendFile(filePath);
+        }
+      });
+})
 
 app.use(morgan('dev'))
 // app.use((req,res,next)=>{

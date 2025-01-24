@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const date = new Date();
         //uploads/profile/${date.getFullYear()}/${date.getMonth()}/${date.getDate()}
-        const dir=`/public`
+        const dir=`./tmp`
         fs.mkdir(dir,{recursive:true},
             (err)=>{cb(null, dir) }    )
     },
