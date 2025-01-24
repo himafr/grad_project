@@ -33,7 +33,17 @@ app.get('/tmp/:id', (req, res) => {
       }
     });
   });
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
+const upload = multer({ dest: 'pp/' });
+
+// Endpoint to handle file uploads
+app.post('/upload', upload.single('file'), (req, res) => {
+    if (req.file) {
+        res.status(200).send(`File uploaded successfully: ${req.file.filename}`);
+    } else {
+        res.status(400).send('No file uploaded.');
+    }
+});
 // app.use((req,res,next)=>{
 //     setTimeout(next,3000)
 // })
