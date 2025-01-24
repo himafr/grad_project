@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
             (err)=>{cb(null, dir) }    )
     },
     filename: function (req, file, cb) {
-      console.log(req.user)
+      console.log(req.user.user_id)
       cb(null, Date.now().toString()+"@"+req.user?.user_id+path.extname(file.originalname)) 
     }
   })
