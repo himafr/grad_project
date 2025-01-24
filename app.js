@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
-app.use('/uploads',express.static(`uploads`))
+app.use('/tmp',express.static(`${__dirname}/tmp`))
 
 app.use(morgan('dev'))
 // app.use((req,res,next)=>{
