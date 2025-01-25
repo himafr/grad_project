@@ -8,7 +8,10 @@ const router=express.Router()
 router.post('/signup',authController.registerUser)
 router.post('/login',authController.loginUser)
 router.post('/cover',authController.protect,  midImg.imgUpload.single("cover"),mg.mega,midImg.check,userController.cover)
-router.post('/photo',  authController.protect ,midImg.imgUpload.single("photo"),mg.mega,userController.photo)
+router.post('/photo',  authController.protect ,midImg.imgUpload.single("photo"),(req,res,next)=>{
+    console.log(File.buffer)
+    next()
+},mg.mega,userController.photo)
 
 // router
 // .route("/")
