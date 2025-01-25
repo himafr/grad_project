@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser'); 
 const favicon = require('serve-favicon');
 const path = require('path');
+const fsp = require("fs").promises;
 const cors=require('cors');
 const app = express();
 const userRoute=require('./router/user.routes')
@@ -10,10 +11,11 @@ const bookRoute=require('./router/book.routes')
 const medRoute=require('./router/medicine.routes')
 const AppError=require('./utils/appError')
 const globalErrorControllers=require('./controllers/error.controller');
-const {Database}=require('./config/db.config');
 const { protect } = require("./controllers/auth.controller");
-const fs = require("fs");
+const mg = require("./middlewares/mega.middleware")
+// const {} = require("deno");
 
+const axios = require('axios');
 // middlewares 
 // Parse application/x-www-form-urlencoded
 app.use(cors())
@@ -21,50 +23,23 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
-app.get('/tmp/:id', (req, res) => {
-    const filePath = `${__dirname}/tmp/${req.params.id}`;
-    console.log(filePath);
-  
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-      if (err) {
-        res.status(404).send(`File not found + ${filePath}`);
-      } else {
-        res.sendFile(filePath);
-      }
-    });
-  });
-// app.use(morgan('dev'))
-const multer = require('multer');
-// Set up Multer to handle file uploads and store them in /tmp directory
-const upload = multer({ dest: '/tmp/' });
+// Initialize Mega SDK
 
+// app.use(morgan('dev');
 // Endpoint to handle file uploads
-app.post('/upload', upload.single('file'), (req, res) => {
-    if (req.file) {
-        res.status(200).send(`File uploaded successfully: ${req.file.filename}`);
-    } else {
-        res.status(400).send('No file uploaded.');
-    }
-});
-app.get('/file', async (req, res) => {
+
+app.get('/get/:fileName', async (req, res) => {
+  const { fileName } = req.params;
   try {
-      const fileName = req.query.name; // Get the file name from query parameters
-      if (!fileName) {
-          return res.status(400).send('File name is required');
-      }
-      const filePath = path.join('/tmp', fileName);
-      const fileExists = await fs.access(filePath).then(() => true).catch(() => false);
-
-      if (!fileExists) {
-          return res.status(404).send('File not found');
-      }
-
-      const fileData = await fs.readFile(filePath);
-      res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-      res.send(fileData);
+    const storage = await mg.getLoggedInStorage();
+      const file = storage.find(fileName)
+      if (!file) throw Error('File not found!');
+      const data = await file.downloadBuffer();
+      const filePath = path.join(__dirname, 'tmp', fileName);
+      await fsp.writeFile(filePath, data); // Use the promise-based version of fs.writeFile
+      res.sendFile(filePath);
   } catch (error) {
-      console.error('Error fetching file:', error);
-      res.status(500).send('Server error');
+    res.status(500).send(`${error.message}`);
   }
 });
 // app.use((req,res,next)=>{

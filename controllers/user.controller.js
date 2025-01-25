@@ -10,6 +10,7 @@ const {
 } = require("../helpers/constants.js");
 const { request } = require("express");
 const UserModel = require("../models/user.model.js");
+const StorageModel = require("../middlewares/mega.middleware.js");
 
 class UserController {
   
@@ -26,13 +27,17 @@ class UserController {
     const userId = req.user.user_id;
     const photoToBeDeleted = await AuthModel.findUserByAttribute("user_id",userId)
     try{
-      await fs.unlinkSync(photoToBeDeleted.cover_photo);
+
+      const storage= await StorageModel.getLoggedInStorage()
+      const file = storage.find(photoToBeDeleted.cover_photo);
+      await file.delete();
     }catch{
-      console.log("easy man")
-    }
+        console.log("easy man")
+      }
+  
     
     let data={
-      cover_photo:req.file?.path||'not found'
+      cover_photo:req.file?.filename||'not found'
     }
     try {
       const updateCover = await UserModel.updateUser(data, userId);
@@ -60,7 +65,15 @@ class UserController {
 }
 static async photo(req, res, next) {
   const userId = req.user.user_id;
-  const photoToBeDeleted = await AuthModel.findUserByAttribute("user_id",userId)
+  const photoToBeDeleted = await AuthModel.findUserByAttribute("user_id",userId);
+  try{
+
+    const storage= await StorageModel.getLoggedInStorage()
+    const file = storage.find(photoToBeDeleted.photo);
+    await file.delete();
+  }catch{
+      console.log("easy man")
+    }
 //   try{
 //   await fs.unlinkSync(photoToBeDeleted.photo);
 // }catch{
@@ -68,7 +81,7 @@ static async photo(req, res, next) {
 // }
 
     let data={
-      photo:req.file?.path||'not found'
+      photo:req.file?.filename||'not found'
     }
     try {
       const updatePhoto = await UserModel.updateUser(data, userId);
