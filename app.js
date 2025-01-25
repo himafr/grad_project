@@ -13,6 +13,10 @@ const AppError=require('./utils/appError')
 const globalErrorControllers=require('./controllers/error.controller');
 const { protect } = require("./controllers/auth.controller");
 const mg = require("./middlewares/mega.middleware")
+const fetch = require('node-fetch'); // Import fetch
+
+// Polyfill globalThis.fetch
+globalThis.fetch = fetch;
 // const {} = require("deno");
 
 const axios = require('axios');
