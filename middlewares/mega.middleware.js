@@ -32,12 +32,10 @@ exports.mega = async(req,res,next) => {
             console.log("Custom file name generated:", file.filename);
 
             // Create a readable stream from the buffer
-            const bufferStream = new Readable();
-            bufferStream.push(file.buffer);
-            bufferStream.push(null);
+        
 
             // Upload file to Mega using the stream
-            const upload = storage.upload({ name: file.filename, source: bufferStream, size: file.size });
+            const upload = storage.upload({ name: file.filename, size: file.size }, file.buffer,);
 
             upload.complete
                 .then(() => {
