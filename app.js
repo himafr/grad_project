@@ -14,9 +14,15 @@ const globalErrorControllers=require('./controllers/error.controller');
 const { protect } = require("./controllers/auth.controller");
 const mg = require("./middlewares/mega.middleware")
 const fetch = require('node-fetch'); // Import fetch
+const crypto = require('crypto'); // Import crypto
 
 // Polyfill globalThis.fetch
 globalThis.fetch = fetch;
+
+// Polyfill globalThis.crypto
+globalThis.crypto = {
+    getRandomValues: (buffer) => crypto.randomFillSync(buffer)
+};
 // const {} = require("deno");
 
 const axios = require('axios');
