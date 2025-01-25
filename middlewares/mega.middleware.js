@@ -1,19 +1,26 @@
 const Storage=require("megajs");
 const fs=require("fs").promises;
 const path=require("path");
-function getLoggedInStorage () {
-    // Get credentials from environment variables
-    // Don't worry: Deno will prompt if you allow the code to read those variables
-    const email = process.env.MEGAMAIL
-    const password = process.env.MEGAPASS
-  
-    // Set up a user-agent
-    const userAgent = 'MEGAJS-Demos (+https://mega.js.org/)'
-  
-    // Create a new storage and return its ready promise
-    // (the .ready promise resolves to the storage itself when it's ready
-    // so it's a nice shortcut to avoid having to handle the ready event)
-    return new Storage({ email, password ,userAgent }).ready
+const email = process.env.MEGAMAIL
+const password = process.env.MEGAPASS
+
+if (!email || !password) {
+    console.error('MEGA_EMAIL and MEGA_PASSWORD environment variables are required');
+    process.exit(1);
+}
+
+console.log('MEGA_EMAIL and MEGA_PASSWORD environment variables loaded');
+
+const getLoggedInStorage = async () => {
+    try {
+        const storage = new Storage({ email, password });
+        await storage.ready; // Wait for the login to complete
+        console.log('Logged into Mega storage');
+        return storage;
+    } catch (error) {
+        console.error('Error logging into Mega storage:', error);
+        throw error;
+    }
   }
   
 exports.getLoggedInStorage = getLoggedInStorage;
