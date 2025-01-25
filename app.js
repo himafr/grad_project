@@ -37,19 +37,35 @@ app.use(express.static(`${__dirname}/public`));
 
 // app.use(morgan('dev');
 // Endpoint to handle file uploads
-
 app.get('/get/:fileName', async (req, res) => {
   const { fileName } = req.params;
   try {
-    const storage = await mg.getLoggedInStorage();
-      const file = storage.find(fileName)
-      if (!file) throw Error('File not found!');
-      const data = await file.downloadBuffer();
-      const filePath = path.join(__dirname, 'tmp', fileName);
-      await fsp.writeFile(filePath, data); // Use the promise-based version of fs.writeFile
-      res.sendFile(filePath);
+      const storage = await mg.getLoggedInStorage();
+
+      const file = storage.root.children.find(f => f.name === fileName);
+      if (!file) throw new Error('File not found!');
+
+      const downloadStream = file.download();
+
+      // Set appropriate headers
+      res.setHeader('Content-Disposition', `attachment; filename=${file.name}`);
+      res.setHeader('Content-Type', 'application/octet-stream');
+
+      // Pipe the download stream directly to the response
+      downloadStream.pipe(res);
+
+      downloadStream.on('end', () => {
+          console.log('File streamed successfully:', fileName);
+      });
+
+      downloadStream.on('error', (err) => {
+          console.error('Error streaming file:', err);
+          res.status(500).send(`Error streaming file: ${err.message}`);
+      });
+      
   } catch (error) {
-    res.status(500).send(`${error.message}`);
+    console.log(error)
+      res.status(500).send(`Error: ${error.message}`);
   }
 });
 // app.use((req,res,next)=>{
