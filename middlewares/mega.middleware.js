@@ -30,16 +30,3 @@ exports.mega = async(req,res,next) => {
           res.status(400).send('No file uploaded.');
       }  
 }
-// exports.mega = async(req,res,next) => {
-//   const { file } = req;
-//   if (req.file) {
-//       const storage = await getLoggedInStorage();
-//       // Upload file to Mega
-      
-//      await storage.upload({name:file.filename ,data:file.buffer });
-//       // Generate a public link for the uploaded file
-//  next();
-//     } else {
-//         res.status(400).send('No file uploaded.');
-//     }
-// }

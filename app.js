@@ -36,7 +36,7 @@ app.use(express.static(`${__dirname}/public`));
 // Initialize Mega SDK
 
 // app.use(morgan('dev');
-// Endpoint to handle file uploads
+// Endpoint to handle file stream
 app.get('/get/:fileName', async (req, res) => {
   const { fileName } = req.params;
   try {
@@ -55,7 +55,7 @@ app.get('/get/:fileName', async (req, res) => {
       downloadStream.pipe(res);
 
       downloadStream.on('end', () => {
-          console.log('File streamed successfully:', fileName);
+        //   console.log('File streamed successfully:', fileName);
       });
 
       downloadStream.on('error', (err) => {
