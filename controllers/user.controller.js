@@ -228,7 +228,7 @@ static async photo(req, res, next) {
     //         )
     //       );
   
-    //     if (user.id !== res.locals.user.id)
+    //     if (user.use_id !== res.locals.user.user_id)
     //       return next(
     //         new AppError("You are not authorized", STATUS_CODES.FORBIDDEN)
     //       );

@@ -24,11 +24,12 @@ class BookController {
       let {query} = req;
       console.log(query)
       query.limit= query.limit||6;
+      query.page= query.page||0;
       if(query.page<0)
-        return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+        return next(new AppError("No books found", STATUS_CODES.NOT_FOUND));
       const [books,nums] = await BooksModel.getAllBooks(req.query);
       if (!books.length)
-        return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+        return next(new AppError("No books found", STATUS_CODES.NOT_FOUND));
       
 
       return res.status(STATUS_CODES.OK).json({
@@ -65,10 +66,10 @@ class BookController {
       console.log(admin_id)
       query.limit= query.limit||6;
       if(query.page<0)
-        return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+        return next(new AppError("No books found", STATUS_CODES.NOT_FOUND));
       const [books,nums] = await BooksModel.getAdminBooks(req.query,admin_id);
       if (!books.length)
-        return next(new AppError("No blog found", STATUS_CODES.NOT_FOUND));
+        return next(new AppError("No books found", STATUS_CODES.NOT_FOUND));
       
 
       return res.status(STATUS_CODES.OK).json({
@@ -105,7 +106,7 @@ class BookController {
     requestBody.book_photo = photoPath;
     requestBody.admin_id = req.user.user_id;
     console.log(req.user.user_id);
-    // requestBody.admin_id = req.user.id;
+    // requestBody.admin_id = req.user.user_id;
     try {
       const Result = await BooksModel.createBook(requestBody);
 

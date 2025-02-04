@@ -40,9 +40,13 @@ exports.logInUser = async (username, password) => {
     const authCheck = await verifyUserPassword(password, user.password);
 
     if (authCheck) {
+      console.log(user.first_name)
       const jwtPayload = {
         userId: user.user_id,
         username: user.username,
+        role:user.role,
+        first_name: user.first_name,
+        photo: user.photo
       };
 
       const token = getJwtToken(jwtPayload);

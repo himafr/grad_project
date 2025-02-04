@@ -31,6 +31,5 @@ exports.bookRequiredFields = {
 
 exports.medicineRequiredFields = {
   MEDICINE_NAME: 'med_name',
-  MED_PRICE: 'med_price',
-  PHARM_ID: 'pharm_id'
+  MED_PRICE: 'med_price'
 }

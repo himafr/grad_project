@@ -17,7 +17,7 @@ class BooksModel {
       const sql = `SELECT * FROM books WHERE admin_id = ${admin_id}
       LIMIT ${query.limit} OFFSET ${query.page*query.limit}`;
       const result = await Database.executeQuery(sql);
-      const num=`select COUNT(book_id)AS nums from books;`
+      const num=`select COUNT(book_id)AS nums from books WHERE admin_id = ${admin_id};`
       const nums = await Database.executeQuery(num);
       return [result, nums];
     } catch (err) {

@@ -1,21 +1,35 @@
 const { Database } = require("../config/db.config");
 class MedsModel {
-  static async getAllMeds() {
+  static async getAllMeds(query) {
     try {
-      const sql = "SELECT * FROM meds";
+      const sql = `SELECT * FROM meds LIMIT ${query.limit} OFFSET ${query.page*query.limit}`;
       const result = await Database.executeQuery(sql);
-      return result;
+      const num=`select COUNT(med_id)AS nums from meds;`
+      const nums = await Database.executeQuery(num);
+      return [result,nums];
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
+  static async getAllPharmMeds(query) {
+    try {
+      const sql = `SELECT * FROM meds  WHERE pharm_id = ${query.pharm_id} LIMIT ${query.limit} OFFSET ${query.page*query.limit}`;
+      const result = await Database.executeQuery(sql);
+      const num=`select COUNT(med_id)AS nums from meds WHERE pharm_id = ${pharm_id};`
+      const nums = await Database.executeQuery(num);
+      return [result,nums];
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   static async getMedById(id) {
     const sql = "SELECT * FROM meds WHERE med_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
     return result[0];
-  }
+  };
 
   static async createMed(data) {
     try {
@@ -24,7 +38,8 @@ class MedsModel {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
   static async updateMed(updatedData, id) {
     try {
       const sql = `UPDATE meds SET ? WHERE med_id=?`;
@@ -34,7 +49,8 @@ class MedsModel {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
   static async deleteMed(id) {
     try {
       const sql = `DELETE FROM meds WHERE med_id=?`;
@@ -44,6 +60,7 @@ class MedsModel {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
 }
 module.exports = MedsModel;

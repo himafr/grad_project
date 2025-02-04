@@ -24,6 +24,6 @@ exports.imgUpload = multer({ storage:storage,
 
 exports.check=(req,res,next)=>{
   if(!req.file)next (new AppError('No file uploaded!',400))
-  if(!isAvailable(req.body,Object.values(medicineRequiredFields)))next (new AppError(' book required fields not provided'))
+  if(!isAvailable(req.body,Object.values(medicineRequiredFields)))next (new AppError(' medicine required fields not provided'))
   next()
 }

@@ -51,13 +51,17 @@ const { findUserByAttribute } = require("../models/auth.model.js");
 
     try {
       const {user,token:access_token}= await AuthService.signUpUser(requestBody);
-
+const freshUser = user;
+delete freshUser.password
+    delete freshUser.passwordChangedAt
+    delete freshUser.created_at
       saveCookie(res, cookieAttributeForJwtToken, access_token);
       res.status(STATUS_CODES.SUCCESSFULLY_CREATED).json({status:"success", message:  "The user signed up successfully",
         token: access_token,
         data:{
           userId: user.user_id,
           username: user.username,
+          userData:freshUser
       }
       });
     } catch (error) {
@@ -105,14 +109,18 @@ const { findUserByAttribute } = require("../models/auth.model.js");
         username,
         password
       );
-
+      const freshUser =user;
+      delete freshUser.password
+      delete freshUser.passwordChangedAt
+      delete freshUser.created_at
       saveCookie(res, cookieAttributeForJwtToken, access_token);
 
       res.status(STATUS_CODES.OK).json({status:"success", message: "User logged in successfully",
         token: access_token,
         data:{
-          userId: user.id,
+          userId: user.user_id,
           username: user.username,
+          userData:freshUser
       }
       });
     } catch (error) {

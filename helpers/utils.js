@@ -95,7 +95,10 @@ exports.verifyUserPassword = async (plainTextPassword, hashPassword) => {
 exports.getJwtToken = (jwtPayload) => jwt.sign(
   {
     userId: jwtPayload.userId,
-    username: jwtPayload.username
+    username: jwtPayload.username,
+    role:jwtPayload.role,
+    first_name: jwtPayload.first_name,
+    photo: jwtPayload.photo
   },
   process.env.JWT_SECRET,
   { expiresIn: process.env.JWT_EXPIRES_IN }

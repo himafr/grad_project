@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 // Initialize Mega SDK
 
-// app.use(morgan('dev');
+app.use(morgan('dev'));
 // Endpoint to handle file stream
 app.get('/get/:fileName', async (req, res) => {
   const { fileName } = req.params;
@@ -68,9 +68,9 @@ app.get('/get/:fileName', async (req, res) => {
       res.status(500).send(`Error: ${error.message}`);
   }
 });
-// app.use((req,res,next)=>{
-//     setTimeout(next,3000)
-// })
+app.use((req,res,next)=>{
+    setTimeout(next,5000)
+})
   
 //Routes
 // app.get('/as',async(req,res)=>{
