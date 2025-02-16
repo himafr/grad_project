@@ -68,9 +68,9 @@ app.get('/get/:fileName', async (req, res) => {
       res.status(500).send(`Error: ${error.message}`);
   }
 });
-app.use((req,res,next)=>{
-    setTimeout(next,5000)
-})
+// app.use((req,res,next)=>{
+//     setTimeout(next,5000)
+// })
   
 //Routes
 // app.get('/as',async(req,res)=>{

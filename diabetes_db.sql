@@ -21,6 +21,13 @@ CREATE TABLE IF NOT EXISTS users(
     email VARCHAR(255) DEFAULT 'not set',
     address VARCHAR(255) DEFAULT 'not set'
 );
+CREATE TABLE IF NOT EXISTS user_review(
+    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    review_rating Decimal(2,1) NOT NULL,
+    review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 
 
 CREATE TABLE IF NOT EXISTS books(
@@ -35,8 +42,25 @@ CREATE TABLE IF NOT EXISTS books(
     FOREIGN KEY (admin_id) REFERENCES users(user_id)
 );
 
--- book likes 
--- book comments 
+CREATE TABLE IF NOT EXISTS book_review(
+    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    review_rating Decimal(2,1) NOT NULL,
+    review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+
+CREATE TABLE IF NOT EXISTS book_comments(
+    comment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    comment_content VARCHAR(2000)not NULL,
+    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
 
 CREATE TABLE IF NOT EXISTS meds(
     med_id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -45,12 +69,33 @@ CREATE TABLE IF NOT EXISTS meds(
     med_price INTEGER not NULL,
     med_photo VARCHAR(255) NOT NULL DEFAULT 'not set',
     med_summary VARCHAR(500) NOT NULL DEFAULT 'not set',
+    med_cat VARCHAR(500) NOT NULL DEFAULT 'not set',
     pharm_id INT NOT NULL ,
     FOREIGN KEY (pharm_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS med_review(
+    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    review_rating Decimal(2,1) NOT NULL,
+    review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    med_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (med_id) REFERENCES meds(med_id)
+);
 
---recipe
+CREATE TABLE IF NOT EXISTS med_comments(
+    comment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    comment_content VARCHAR(2000)not NULL,
+    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    med_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (med_id) REFERENCES meds(med_id)
+);
+
+
+
 CREATE TABLE IF NOT EXISTS categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(50)
@@ -82,16 +127,35 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
     PRIMARY KEY (recipe_id, ingredient_id)
 );
 
+CREATE TABLE IF NOT EXISTS recipe_review(
+    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    review_rating Decimal(2,1) NOT NULL,
+    review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    recipe_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
+);
+
+CREATE TABLE IF NOT EXISTS recipe_comments(
+    comment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    comment_content VARCHAR(2000)not NULL,
+    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    recipe_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
+);
 
 
 
---chats 
-CREATE TABLE chats (
+
+CREATE TABLE IF NOT EXISTS chats (
     chat_id INT AUTO_INCREMENT PRIMARY KEY,
     chat_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Messages (
+CREATE TABLE IF NOT EXISTS Messages (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     chat_id INT,
