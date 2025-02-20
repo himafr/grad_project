@@ -29,8 +29,8 @@ class MedController {
       let meds,nums;
       if(query.page<0)
         return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND));
-      
-      if(req.user.role == "pharm"){
+      console.log(req.user)
+      if(req.user.role == "pharmacy"){
          [meds,nums] = await medsModel.getAllPharmMeds(query);
         query.pharm_id =req.user.user_id;
       }else{
