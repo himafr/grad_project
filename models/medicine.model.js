@@ -14,9 +14,12 @@ class MedsModel {
 
   static async getAllPharmMeds(query) {
     try {
+      console.log("query")
+      console.log(query.pharm_id)
+      console.log("query")
       const sql = `SELECT * FROM meds  WHERE pharm_id = ${query.pharm_id} LIMIT ${query.limit} OFFSET ${query.page*query.limit}`;
       const result = await Database.executeQuery(sql);
-      const num=`select COUNT(med_id)AS nums from meds WHERE pharm_id = ${pharm_id};`
+      const num=`select COUNT(med_id)AS nums from meds WHERE pharm_id = ${query.pharm_id};`
       const nums = await Database.executeQuery(num);
       return [result,nums];
     } catch (err) {

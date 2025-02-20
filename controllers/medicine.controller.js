@@ -26,32 +26,41 @@ class MedController {
       console.log(query)
       query.limit= query.limit||6;
       query.page= query.page||0;
-      let meds,nums;
+      
       if(query.page<0)
         return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND));
       console.log(req.user)
       if(req.user.role == "pharmacy"){
         query.pharm_id =req.user.user_id;
-         [meds,nums] = await medsModel.getAllPharmMeds(query);
-      }else{
-        [meds,nums] = await medsModel.getAllMeds(query);
-      }
-      if (!meds.length)
-        return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND));
-      
+     const    [meds,nums] = await medsModel.getAllPharmMeds(query);
+         if (meds.length==0){return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND))};
 
+         
+       res.status(STATUS_CODES.OK).json({
+         status: "success",
+         message: "All medicines fetched successfully",
+         data: {
+           meds,
+           nums,
+         },
+       })
+        }else{
+          [meds,nums] = await medsModel.getAllMeds(query);
+          if (meds.length==0){return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND))};
 
-      if (!meds.length)
-        return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND));
-
-      res.status(STATUS_CODES.OK).json({
-        status: "success",
-        message: "All medicines fetched successfully",
-        data: {
-          meds,
-          nums,
-        },
-      });
+          console.log("working")
+          
+        res.status(STATUS_CODES.OK).json({
+          status: "success",
+          message: "All medicines fetched successfully",
+          data: {
+            meds,
+            nums,
+          },
+        })
+        }
+       
+       
     } catch (error) {
       return next(
         new AppError(
