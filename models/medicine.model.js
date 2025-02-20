@@ -26,6 +26,7 @@ class MedsModel {
 
   static async getMedById(id) {
     const sql = "SELECT * FROM meds WHERE med_id = ?";
+    // const reviews = "SELECT * FROM meds WHERE med_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
     return result[0];

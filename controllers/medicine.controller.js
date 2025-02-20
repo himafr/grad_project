@@ -31,8 +31,8 @@ class MedController {
         return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND));
       console.log(req.user)
       if(req.user.role == "pharmacy"){
-         [meds,nums] = await medsModel.getAllPharmMeds(query);
         query.pharm_id =req.user.user_id;
+         [meds,nums] = await medsModel.getAllPharmMeds(query);
       }else{
         [meds,nums] = await medsModel.getAllMeds(query);
       }
@@ -121,7 +121,7 @@ class MedController {
             STATUS_CODES.NOT_FOUND
           )
         );
-
+        // const aboutMed=await medsModel.aboutMeds(medId)
       return res.status(STATUS_CODES.OK).json({
         status: "success",
         message: `medicine with id ${medId} fetched successfully`,
