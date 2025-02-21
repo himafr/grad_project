@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS user_review(
 CREATE TABLE IF NOT EXISTS books(
     book_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     book_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    book_title VARCHAR(50) NOT NULL,
-    book_desc VARCHAR(2000) NOT NULL DEFAULT 'not set',
-    book_summary VARCHAR(1500) NOT NULL DEFAULT 'not set',
+    book_title VARCHAR(1000) NOT NULL,
+    book_desc VARCHAR(3000) NOT NULL DEFAULT 'not set',
+    book_summary VARCHAR(3000) NOT NULL DEFAULT 'not set',
     book_url VARCHAR(255) NOT NULL DEFAULT 'not set',
     book_photo VARCHAR(255) NOT NULL DEFAULT 'not set',
     admin_id INT NOT NULL ,

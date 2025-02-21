@@ -307,17 +307,12 @@ class BookController {
           new AppError("You are not authorized", STATUS_CODES.FORBIDDEN)
         );
       const deleteBookResult = await BooksModel.deleteBook(bookId);
-      if (deleteBookResult.affectedRows)
+      
         return res.status(STATUS_CODES.OK).json({
           status:  "success",
           message: `Book with id ${bookId} deleted successfully`,
         });
-      return next(
-        new AppError(
-          `Book with id ${bookId} could not be deleted`,
-          STATUS_CODES.BAD_REQUEST
-        )
-      );
+     
     } catch (error) {
       return next(
         new AppError(
