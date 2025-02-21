@@ -28,10 +28,30 @@ class BooksModel {
   static async getBookById(id) {
     const sql = "SELECT * FROM books WHERE book_id = ?";
     const params = [id];
+    const reviewsSql = "SELECT * FROM book_review WHERE book_id = ?";
+    const commentsSql = "SELECT * FROM book_comments WHERE book_id = ?";
     const result = await Database.executeQuery(sql, params);
-    return result[0];
-  }
+    const review = await Database.executeQuery(reviewsSql, params);
+    const comments = await Database.executeQuery(commentsSql, params);
+    return [result[0], review, comments]; }
 
+    static async createComment(data) {
+      try {
+        const sql = `INSERT INTO book_comments SET ?`;
+        await Database.executeQuery(sql, data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    static async createReview(data) {
+      try {
+        const sql = `INSERT INTO book_review SET ?`;
+        await Database.executeQuery(sql, data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  
   static async createBook(body) {
     try {
       const sql = `INSERT INTO books SET ?`;
@@ -52,7 +72,7 @@ class BooksModel {
   }
   static async deleteBook(id) {
     try {
-      const sql = `DELETE FROM books WHERE id=?`;
+      const sql = `DELETE FROM books WHERE book_id=?`;
       const params = [id];
       const result = await Database.executeQuery(sql, params);
       return result;

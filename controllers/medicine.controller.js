@@ -10,6 +10,7 @@ const {
 } = require("../helpers/constants.js");
 const { request } = require("express");
 const MedsModel = require("../models/medicine.model.js");
+const StorageModel = require("../middlewares/mega.middleware.js");
 
 class MedController {
   /**
@@ -36,7 +37,7 @@ class MedController {
          if (meds.length==0){return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND))};
 
          
-       res.status(STATUS_CODES.OK).json({
+       return res.status(STATUS_CODES.OK).json({
          status: "success",
          message: "All medicines fetched successfully",
          data: {
@@ -44,8 +45,8 @@ class MedController {
            nums,
          },
        })
-        }else{
-          [meds,nums] = await medsModel.getAllMeds(query);
+        }
+        const  [meds,nums] = await medsModel.getAllMeds(query);
           if (meds.length==0){return next(new AppError("No medicine found", STATUS_CODES.NOT_FOUND))};
 
           console.log("working")
@@ -58,7 +59,7 @@ class MedController {
             nums,
           },
         })
-        }
+        
        
        
     } catch (error) {
@@ -108,6 +109,55 @@ class MedController {
       );
     }
   }
+  static async createComment(req, res, next) {
+    const { body: requestBody } = req;
+    const med_id=req.params.id;
+    requestBody.med_id=med_id;
+    requestBody.user_id=req.user.user_id;
+    try {
+      console.log(requestBody)
+      const Result = await medsModel.createComment(requestBody);
+      return res.status(STATUS_CODES.SUCCESSFULLY_CREATED).json({
+        status: "success",
+        message: "comment added successfully",
+        data: {
+          Result,
+        },
+      }); 
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
+  static async createReview(req, res, next) {
+    const { body: requestBody } = req;
+    const med_id=req.params.id;
+    requestBody.med_id=med_id;
+    requestBody.user_id=req.user.user_id;
+    try {
+      const Result = await medsModel.createReview(requestBody);
+      return res.status(STATUS_CODES.SUCCESSFULLY_CREATED).json({
+        status: "success",
+        message: "review added successfully",
+        data: {
+          Result,
+        },
+      }); 
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
 
   /**
    * @description
@@ -121,7 +171,7 @@ class MedController {
     const medId = req.params.id;
 
     try {
-      const med = await medsModel.getMedById(medId);
+      const [med,review,comments] = await medsModel.getMedById(medId);
 
       if (!med)
         return next(
@@ -130,12 +180,13 @@ class MedController {
             STATUS_CODES.NOT_FOUND
           )
         );
-        // const aboutMed=await medsModel.aboutMeds(medId)
       return res.status(STATUS_CODES.OK).json({
         status: "success",
         message: `medicine with id ${medId} fetched successfully`,
         data: {
           med,
+          review,
+          comments,
         },
       });
     } catch (error) {
@@ -164,7 +215,8 @@ class MedController {
     delete requestBody.med_id;
     delete requestBody.pharm_id;
     try {
-      const medToBeUpdated = await medsModel.getMedById(medId);
+      const medToBeUpdated1 = await medsModel.getMedById(medId);
+      const medToBeUpdated=medToBeUpdated1[0];
 
       if (!medToBeUpdated)
         return next(
@@ -211,9 +263,9 @@ class MedController {
    */
   static async deleteMed(req, res, next) {
     const medId = req.params.id;
-    const medToBeDeleted = await medsModel.getMedById(medId);
+    const medToBeDeleted1 = await medsModel.getMedById(medId);
+    const medToBeDeleted =medToBeDeleted1[0]
     try{
-  
       const storage= await StorageModel.getLoggedInStorage()
       const file = storage.find(medToBeDeleted.med_photo);
       await file.delete();

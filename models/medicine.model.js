@@ -29,15 +29,34 @@ class MedsModel {
 
   static async getMedById(id) {
     const sql = "SELECT * FROM meds WHERE med_id = ?";
-    // const reviews = "SELECT * FROM meds WHERE med_id = ?";
+    const reviewsSql = "SELECT * FROM med_review WHERE med_id = ?";
+    const commentsSql = "SELECT * FROM med_comments WHERE med_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
-    return result[0];
+    const review = await Database.executeQuery(reviewsSql, params);
+    const comments = await Database.executeQuery(commentsSql, params);
+    return [result[0], review, comments];
   };
 
   static async createMed(data) {
     try {
       const sql = `INSERT INTO meds SET ?`;
+      await Database.executeQuery(sql, data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  static async createComment(data) {
+    try {
+      const sql = `INSERT INTO med_comments SET ?`;
+      await Database.executeQuery(sql, data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  static async createReview(data) {
+    try {
+      const sql = `INSERT INTO med_review SET ?`;
       await Database.executeQuery(sql, data);
     } catch (err) {
       console.log(err);

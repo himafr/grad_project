@@ -58,12 +58,10 @@ class AuthModel {
    * @returns the user, if exists
    */
   static async findUserByAttribute(attribute, value) {
-    const query = `SELECT * FROM users WHERE ${attribute} = ?`;
     const params = [value];
-
+    const query = `SELECT * FROM users WHERE ${attribute} = ?`;
     const result = await Database.executeQuery(query, params);
-
-    return result[0];
+    return result[0]
   }
 }
 module.exports=AuthModel;

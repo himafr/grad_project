@@ -9,6 +9,7 @@ const {
   userAuthRequiredFields,
 } = require("../helpers/constants.js");
 const { request } = require("express");
+const StorageModel = require("../middlewares/mega.middleware.js");
 
 class BookController {
   /**
@@ -101,11 +102,10 @@ class BookController {
    */
   static async createBook(req, res, next) {
     const { body: requestBody } = req;
-    requestBody.book_url = req.files.pdf[0].path;
-    const photoPath =req.files.image[0].path;
+    requestBody.book_url = req.files.pdf[0].filename;
+    const photoPath =req.files.image[0].filename;
     requestBody.book_photo = photoPath;
     requestBody.admin_id = req.user.user_id;
-    console.log(req.user.user_id);
     // requestBody.admin_id = req.user.user_id;
     try {
       const Result = await BooksModel.createBook(requestBody);
@@ -140,7 +140,7 @@ class BookController {
     const bookId = req.params?.id;
 
     try {
-      const book = await BooksModel.getBookById(bookId);
+      const [book,review,comments]= await BooksModel.getBookById(bookId);
 
       if (!book)
         return next(
@@ -155,6 +155,8 @@ class BookController {
         message: `Book with id ${bookId} fetched successfully`,
         data: {
           book,
+          review,
+          comments,
         },
       });
     } catch (error) {
@@ -168,6 +170,55 @@ class BookController {
     }
   }
 
+  
+  static async createComment(req, res, next) {
+    const { body: requestBody } = req;
+    const book_id=req.params.id;
+    requestBody.book_id=book_id;
+    requestBody.user_id=req.user.user_id;
+    try {
+      const Result = await BooksModel.createComment(requestBody);
+      return res.status(STATUS_CODES.SUCCESSFULLY_CREATED).json({
+        status: "success",
+        message: "comment added successfully",
+        data: {
+          Result,
+        },
+      }); 
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
+  static async createReview(req, res, next) {
+    const { body: requestBody } = req;
+    const book_id=req.params.id;
+    requestBody.book_id=book_id;
+    requestBody.user_id=req.user.user_id;
+    try {
+      const Result = await BooksModel.createReview(requestBody);
+      return res.status(STATUS_CODES.SUCCESSFULLY_CREATED).json({
+        status: "success",
+        message: "review added successfully",
+        data: {
+          Result,
+        },
+      }); 
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
   /**
    * @description
    * the controller method to update some attributes of a blog corresponding to an id
@@ -181,7 +232,8 @@ class BookController {
     console.log(bookId)
 
     try {
-      const bookToBeUpdated = await BooksModel.getBookById(bookId);
+      const bookToBeUpdated1 = await BooksModel.getBookById(bookId);
+      const bookToBeUpdated=bookToBeUpdated1[0]
 
       if (!bookToBeUpdated)
         return next(
@@ -229,9 +281,20 @@ class BookController {
   static async deleteBook(req, res, next) {
     const bookId = req.params.id;
 
+    const bookToBeDeleted1 = await BooksModel.getBookById(bookId);
+    const bookToBeDeleted=bookToBeDeleted1[0]
+    try{
+      console.log(bookToBeDeleted)
+      const storage= await StorageModel.getLoggedInStorage()
+      const file = storage.find(bookToBeDeleted.book_url);
+      const file2 = storage.find(bookToBeDeleted.book_photo);
+      await file.delete();
+      await file2.delete();
+    }catch (e){
+      console.log("easy man")
+      console.log(e)
+    }
     try {
-      const bookToBeDeleted = await BooksModel.getBookById(bookId);
-
       if (!bookToBeDeleted)
         return next(
           new AppError(
@@ -244,8 +307,6 @@ class BookController {
           new AppError("You are not authorized", STATUS_CODES.FORBIDDEN)
         );
       const deleteBookResult = await BooksModel.deleteBook(bookId);
-      await fs.unlinkSync(bookToBeDeleted.book_url);
-      await fs.unlinkSync(bookToBeDeleted.book_photo);
       if (deleteBookResult.affectedRows)
         return res.status(STATUS_CODES.OK).json({
           status:  "success",

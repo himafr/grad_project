@@ -4,6 +4,8 @@ const medMaker = require("../middlewares/img.uploader.middleware");
 const authController = require("../controllers/auth.controller");
 const { mega } = require("../middlewares/mega.middleware");
 const router = express.Router();
+router.post("/comments/:id",medController.createComment)
+router.post("/review/:id",medController.createReview)
 router
   .route("/")
   .get( medController.getAllMeds)

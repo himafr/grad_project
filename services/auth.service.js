@@ -34,7 +34,7 @@ exports.signUpUser = async (obj) => {
  * @returns the logged in user along with the access token
  */
 exports.logInUser = async (username, password) => {
-  const user = await AuthModel.findUserByAttribute("username", username);
+  const user= await AuthModel.findUserByAttribute("username", username);
 
   if (user) {
     const authCheck = await verifyUserPassword(password, user.password);

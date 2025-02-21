@@ -30,3 +30,19 @@ exports.mega = async(req,res,next) => {
           res.status(400).send('No file uploaded.');
       }  
 }
+exports.megaBook = async(req,res,next) => {
+
+   const  file  = req.files.pdf[0];
+   const  file2  = req.files.image[0];
+    if (file&&file2) {
+        const storage = await getLoggedInStorage();
+     file.filename=`${Date.now().toString()}@${req.user?.user_id}${path.extname(file.originalname)}`
+     file2.filename=`${Date.now().toString()}@${req.user?.user_id}${path.extname(file2.originalname)}`
+        // Upload file to Mega
+         await storage.upload({ name:file.filename ,allowUploadBuffering:true},file.buffer).complete
+         await storage.upload({ name:file2.filename ,allowUploadBuffering:true},file2.buffer).complete
+          next();
+      } else {
+          res.status(400).send('No file uploaded.');
+      }  
+}
