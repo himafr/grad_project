@@ -16,6 +16,7 @@ class UserModel {
     const params = [id];
     const result = await Database.executeQuery(sql, params);
     const review = await Database.executeQuery(reviewsSql, params);
+    console.log(id)
     return [result[0], review ];
     } catch (err) {
       console.log(err);

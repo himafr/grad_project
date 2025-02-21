@@ -140,7 +140,7 @@ class UserController {
     const userId = req.user.user_id;
 
     try {
-      const [user, review] = await UserModel.getUserById("user_id", userId);
+      const [user, review] = await UserModel.getUserById(userId);
 
       if (!user)
         return next(
