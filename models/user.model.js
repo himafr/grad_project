@@ -12,7 +12,7 @@ class UserModel {
   static async getUserById(id) {
     try {
       const sql = "SELECT * FROM users where user_id=?";
-      const reviewsSql = "SELECT * FROM user_review WHERE med_id = ?";
+      const reviewsSql = "SELECT * FROM user_review WHERE user_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
     const review = await Database.executeQuery(reviewsSql, params);
