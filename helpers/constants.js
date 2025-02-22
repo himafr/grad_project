@@ -33,3 +33,10 @@ exports.medicineRequiredFields = {
   MEDICINE_NAME: 'med_name',
   MED_PRICE: 'med_price'
 }
+exports.recipeRequiredFields = {
+  RECIPE_NAME: 'recipe_name',
+  INSTRUCTIONS: 'instructions',
+  RECIPE_CARB: 'recipe_carb',
+  INGREDIENTS: 'ingredients',
+
+}

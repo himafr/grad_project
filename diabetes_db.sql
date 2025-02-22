@@ -103,29 +103,17 @@ CREATE TABLE IF NOT EXISTS categories (
 
 CREATE TABLE IF NOT EXISTS recipes (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
-    recipe_name VARCHAR(100) NOT NULL,
-    instructions TEXT,
+    recipe_name VARCHAR(1000) NOT NULL,
+    instructions VARCHAR(3000) NOT NULL,
     recipe_carb INT NOT NULL ,
+    ingredients VARCHAR(2000) NOT NULL,
+    recipe_photo VARCHAR(255) NOT NULL DEFAULT 'not set',
     category_id INT,
     admin_id INT,
-    FOREIGN KEY (recipe_id) REFERENCES users(user_id ),
+    FOREIGN KEY (admin_id) REFERENCES users(user_id ),
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
-CREATE TABLE IF NOT EXISTS ingredients (
-    ingredient_id INT AUTO_INCREMENT PRIMARY KEY,
-    ingredient_carb INT NOT NULL,
-    ingredient_name VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS recipe_ingredients (
-    recipe_id INT,
-    ingredient_id INT,
-    quantity VARCHAR(50),
-    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
-    FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id),
-    PRIMARY KEY (recipe_id, ingredient_id)
-);
 
 CREATE TABLE IF NOT EXISTS recipe_review(
     review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -164,7 +152,6 @@ CREATE TABLE IF NOT EXISTS Messages (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
 );
-
 
 
 

@@ -9,6 +9,7 @@ const app = express();
 const userRoute=require('./router/user.routes')
 const bookRoute=require('./router/book.routes')
 const medRoute=require('./router/medicine.routes')
+const recipeRoute=require('./router/recipe.routes')
 const AppError=require('./utils/appError')
 const globalErrorControllers=require('./controllers/error.controller');
 const { protect } = require("./controllers/auth.controller");
@@ -26,6 +27,7 @@ globalThis.crypto = {
 // const {} = require("deno");
 
 const axios = require('axios');
+const { Database } = require("./config/db.config");
 // middlewares 
 // Parse application/x-www-form-urlencoded
 app.use(cors())
@@ -68,41 +70,40 @@ app.get('/get/:fileName', async (req, res) => {
       res.status(500).send(`Error: ${error.message}`);
   }
 });
+
 // app.use((req,res,next)=>{
 //     setTimeout(next,5000)
 // })
   
 //Routes
 // app.get('/as',async(req,res)=>{
-//     try{
-//         const sql =`SELECT *
-//         FROM series 
-//         JOIN reviews
-//         ON series.id = reviews.series_id
-//   `
-//         const result = await Database.executeQuery(sql);
-//     console.log(result)
-//     res.status(200).json({
-//         status: "success",
-//         data: result
-//     })
-    
-//     } catch(err){
-//         console.log(err);
-//         res.status(500).json({
-//             status: "error",
-//             message: "Something went wrong, please try again later."
-//         })
-//     }
-    
-// })
+  async function abs(){
 
+    try{
+      const sql =`INSERT INTO categories ( category_name)
+      VALUES ('وصافات صحيه'),('وصافات عاديه'),('مشروبات')
+      `
+      const result = await Database.executeQuery(sql);
+      console.log(result)
+      
+      
+    } catch(err){
+      console.log(err);
+     
+    }
+  } 
+    
+    // })
+    
 app.get("/", protect,(req,res)=>{
     res.send("Hello world");
 })
 app.use("/api/v1/users",userRoute);
 app.use("/api/v1/meds",protect,
     medRoute
+);
+app.use("/api/v1/recipes",protect,
+    recipeRoute
 );
 app.use("/api/v1/books",protect,bookRoute);
 

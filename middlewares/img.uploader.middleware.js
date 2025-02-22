@@ -3,7 +3,8 @@ const fs= require('fs')
 const path = require('path');
 const AppError = require('../utils/appError.js');
 const {
-  medicineRequiredFields
+  medicineRequiredFields,
+  recipeRequiredFields
 } =require ("../helpers/constants.js");
 const {
   isAvailable,
@@ -25,5 +26,10 @@ exports.imgUpload = multer({ storage:storage,
 exports.check=(req,res,next)=>{
   if(!req.file)next (new AppError('No file uploaded!',400))
   if(!isAvailable(req.body,Object.values(medicineRequiredFields)))next (new AppError(' medicine required fields not provided'))
+  next()
+}
+exports.checkRecipe=(req,res,next)=>{
+  if(!req.file)next (new AppError('No file uploaded!',400))
+  if(!isAvailable(req.body,Object.values(recipeRequiredFields)))next (new AppError(' recipe required fields not provided'))
   next()
 }
