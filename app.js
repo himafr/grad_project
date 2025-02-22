@@ -92,7 +92,7 @@ app.get('/get/:fileName', async (req, res) => {
      
     }
   } 
-    
+    abs();
     // })
     
 app.get("/", protect,(req,res)=>{
