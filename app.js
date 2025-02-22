@@ -77,23 +77,7 @@ app.get('/get/:fileName', async (req, res) => {
   
 //Routes
 // app.get('/as',async(req,res)=>{
-  async function abs(){
 
-    try{
-      const sql =`INSERT INTO categories ( category_name)
-      VALUES ('وصافات صحيه'),('وصافات عاديه'),('مشروبات')
-      `
-      const result = await Database.executeQuery(sql);
-      console.log(result)
-      
-      
-    } catch(err){
-      console.log(err);
-     
-    }
-  } 
-    abs();
-    // })
     
 app.get("/", protect,(req,res)=>{
     res.send("Hello world");
