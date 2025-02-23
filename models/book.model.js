@@ -28,8 +28,8 @@ class BooksModel {
   static async getBookById(id) {
     const sql = "SELECT * FROM books WHERE book_id = ?";
     const params = [id];
-    const reviewsSql = "SELECT * FROM book_review WHERE book_id = ?";
-    const commentsSql = "SELECT * FROM book_comments WHERE book_id = ?";
+    const reviewsSql = "SELECT * FROM med_review INNER JOIN users ON users.user_id=med_comments.user_id WHERE med_id = ?";
+    const commentsSql = "SELECT * FROM med_comments INNER JOIN users ON users.user_id=med_comments.user_id WHERE med_id = ?";
     const result = await Database.executeQuery(sql, params);
     const review = await Database.executeQuery(reviewsSql, params);
     const comments = await Database.executeQuery(commentsSql, params);
