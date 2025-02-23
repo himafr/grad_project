@@ -149,10 +149,43 @@ CREATE TABLE IF NOT EXISTS Messages (
     chat_id INT,
     message TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (chat_id) REFERENCES chats(chat_id) ON DELETE CASCADE
 );
 
 
+ALTER TABLE user_review DROP FOREIGN KEY user_review_ibfk_1;
+ALTER TABLE book_review DROP FOREIGN KEY book_review_ibfk_1;
+ALTER TABLE book_review DROP FOREIGN KEY book_review_ibfk_2;
+ALTER TABLE recipe_review DROP FOREIGN KEY recipe_review_ibfk_1;
+ALTER TABLE recipe_review DROP FOREIGN KEY recipe_review_ibfk_2;
+ALTER TABLE med_review DROP FOREIGN KEY med_review_ibfk_1;
+ALTER TABLE med_review DROP FOREIGN KEY med_review_ibfk_2;
+ALTER TABLE book_comments DROP FOREIGN KEY book_comments_ibfk_1;
+ALTER TABLE book_comments DROP FOREIGN KEY book_comments_ibfk_2;
+ALTER TABLE recipe_comments DROP FOREIGN KEY recipe_comments_ibfk_1;
+ALTER TABLE recipe_comments DROP FOREIGN KEY recipe_comments_ibfk_2;
+ALTER TABLE med_comments DROP FOREIGN KEY med_comments_ibfk_1;
+ALTER TABLE med_comments DROP FOREIGN KEY med_comments_ibfk_2;
+ALTER TABLE recipes DROP FOREIGN KEY recipes_ibfk_1;
+ALTER TABLE recipes DROP FOREIGN KEY recipes_ibfk_2;
+ALTER TABLE books DROP FOREIGN KEY books_ibfk_1;
+ALTER TABLE meds DROP FOREIGN KEY meds_ibfk_1;
 
-
+ALTER TABLE user_review ADD CONSTRAINT user_review_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE book_review ADD CONSTRAINT book_review_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE book_review ADD CONSTRAINT book_review_ibfk_2 FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE;
+ALTER TABLE recipe_review ADD CONSTRAINT recipe_review_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE recipe_review ADD CONSTRAINT recipe_review_ibfk_2 FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE;
+ALTER TABLE med_review ADD CONSTRAINT med_review_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE med_review ADD CONSTRAINT med_review_ibfk_2 FOREIGN KEY (med_id) REFERENCES meds(med_id) ON DELETE CASCADE;
+ALTER TABLE book_comments ADD CONSTRAINT book_comments_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE book_comments ADD CONSTRAINT book_comments_ibfk_2 FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE;
+ALTER TABLE recipe_comments ADD CONSTRAINT recipe_comments_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE recipe_comments ADD CONSTRAINT recipe_comments_ibfk_2 FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE;
+ALTER TABLE med_comments ADD CONSTRAINT med_comments_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE med_comments ADD CONSTRAINT med_comments_ibfk_2 FOREIGN KEY (med_id) REFERENCES meds(med_id) ON DELETE CASCADE;
+ALTER TABLE recipes ADD CONSTRAINT recipes_ibfk_1 FOREIGN KEY (admin_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE recipes ADD CONSTRAINT recipes_ibfk_2 FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE CASCADE;
+ALTER TABLE books ADD CONSTRAINT books_ibfk_1 FOREIGN KEY (admin_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ALTER TABLE meds ADD CONSTRAINT meds_ibfk_1 FOREIGN KEY (pharm_id) REFERENCES users(user_id) ON DELETE CASCADE;
