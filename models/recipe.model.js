@@ -33,8 +33,8 @@ class RecipesModel {
 
   static async getRecipeById(id) {
     const sql = "SELECT * FROM recipes WHERE recipe_id = ?";
-    const reviewsSql = "SELECT * FROM med_review INNER JOIN users ON users.user_id=med_comments.user_id WHERE med_id = ?";
-    const commentsSql = "SELECT * FROM med_comments INNER JOIN users ON users.user_id=med_comments.user_id WHERE med_id = ?";
+    const reviewsSql = "SELECT * FROM recipe_review INNER JOIN users ON users.user_id=recipe_review.user_id WHERE recipe_id = ?";
+    const commentsSql = "SELECT * FROM recipe_comments INNER JOIN users ON users.user_id=recipe_comments.user_id WHERE recipe_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
     const review = await Database.executeQuery(reviewsSql, params);
