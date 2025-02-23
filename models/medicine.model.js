@@ -29,7 +29,7 @@ class MedsModel {
 
   static async getMedById(id) {
     const sql = "SELECT * FROM meds WHERE med_id = ?";
-    const reviewsSql = "SELECT * FROM med_review INNER JOIN users ON users.user_id=med_comments.user_id WHERE med_id = ?";
+    const reviewsSql = "SELECT * FROM med_review INNER JOIN users ON users.user_id=med_review.user_id WHERE med_id = ?";
     const commentsSql = "SELECT * FROM med_comments INNER JOIN users ON users.user_id=med_comments.user_id WHERE med_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
