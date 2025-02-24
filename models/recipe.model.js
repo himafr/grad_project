@@ -30,7 +30,7 @@ class RecipesModel {
       console.log(err);
     }
   }
-  static async getAllAdminRecipesApk() {
+  static async getAllRecipesApk() {
     try {
    
       const sql = `SELECT  recipes.recipe_id  , recipes.recipe_name,    recipes.instructions,    recipes.recipe_carb,    recipes.ingredients,    recipes.recipe_photo, recipes.category_id,    categories.category_name FROM     recipes INNER JOIN     categories ON recipes.category_id = categories.category_id ;`;
