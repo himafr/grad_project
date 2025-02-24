@@ -30,6 +30,18 @@ class RecipesModel {
       console.log(err);
     }
   }
+  static async getAllAdminRecipesApk() {
+    try {
+   
+      const sql = `SELECT  recipes.recipe_id  , recipes.recipe_name,    recipes.instructions,    recipes.recipe_carb,    recipes.ingredients,    recipes.recipe_photo, recipes.category_id,    categories.category_name FROM     recipes INNER JOIN     categories ON recipes.category_id = categories.category_id ;`;
+      const result = await Database.executeQuery(sql);
+      const num = `SELECT COUNT(recipe_id)AS nums from recipes ;`;
+      const nums = await Database.executeQuery(num);
+      return [result, nums];
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   static async getRecipeById(id) {
     const sql = "SELECT * FROM recipes INNER JOIN categories ON recipes.category_id = categories.category_id WHERE recipe_id = ?";

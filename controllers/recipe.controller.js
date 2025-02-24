@@ -70,6 +70,32 @@ class RecipeController {
       );
     }
   }
+  static async getAllRecipesApk(req, res, next) {
+    try {
+    
+  
+
+
+      const  [recipes,nums] = await RecipesModel.getAllRecipesApk();
+         
+       return res.status(STATUS_CODES.OK).json({
+         status: "success",
+         message: "All recipes fetched successfully",
+         data: {
+           recipes,
+           nums,
+         },
+       }) 
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
 
   /**
    * @description
