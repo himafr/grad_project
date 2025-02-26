@@ -14,7 +14,7 @@ router.post('/photo',  authController.protect ,midImg.imgUpload.single("photo"),
     next()
 },mg.mega,userController.photo)
 
-
+router.get("/",authController.protect,authController.restrictTo("admin"),userController.getAllUser)
 router
 .route("/:id")
 .get(authController.protect,userController.getUserById)

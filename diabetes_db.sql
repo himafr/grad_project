@@ -14,13 +14,14 @@ CREATE TABLE IF NOT EXISTS users(
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) DEFAULT 'not set',
     number VARCHAR(50) DEFAULT 'not set',
-    photo VARCHAR(255) DEFAULT 'not set',
+photo VARCHAR(500) DEFAULT 'default_user.jpg',
     date_of_birth DATE NOT NULL,
     map_link VARCHAR(255) NOT NULL DEFAULT 'not set',
-    cover_photo VARCHAR(255) DEFAULT 'not set',
     email VARCHAR(255) DEFAULT 'not set',
+    cover_photo VARCHAR(255) DEFAULT 'default_cover.png'
     address VARCHAR(255) DEFAULT 'not set'
 );
+
 CREATE TABLE IF NOT EXISTS user_review(
     review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     review_rating Decimal(2,1) NOT NULL,
@@ -43,13 +44,13 @@ CREATE TABLE IF NOT EXISTS books(
 );
 
 CREATE TABLE IF NOT EXISTS book_review(
-    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     review_rating Decimal(2,1) NOT NULL,
     review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     book_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (book_id) REFERENCES books(book_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE ,
+    PRIMARY KEY (user_id,book_id)
 );
 
 CREATE TABLE IF NOT EXISTS book_comments(
@@ -75,13 +76,13 @@ CREATE TABLE IF NOT EXISTS meds(
 );
 
 CREATE TABLE IF NOT EXISTS med_review(
-    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     review_rating Decimal(2,1) NOT NULL,
     review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     med_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (med_id) REFERENCES meds(med_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ,
+    FOREIGN KEY (med_id) REFERENCES meds(med_id) ON DELETE CASCADE,
+    PRIMARY KEY (med_id,user_id)
 );
 
 CREATE TABLE IF NOT EXISTS med_comments(
@@ -116,13 +117,13 @@ CREATE TABLE IF NOT EXISTS recipes (
 
 
 CREATE TABLE IF NOT EXISTS recipe_review(
-    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
     review_rating Decimal(2,1) NOT NULL,
     review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     recipe_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE,
+    PRIMARY KEY (recipe_id,user_id)
 );
 
 CREATE TABLE IF NOT EXISTS recipe_comments(

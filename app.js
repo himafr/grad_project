@@ -4,8 +4,9 @@ const bodyParser = require('body-parser');
 const favicon = require('serve-favicon');
 const path = require('path');
 const fsp = require("fs").promises;
-const cors=require('cors');
 const app = express();
+const cors=require('cors');
+const http = require('http');
 const userRoute=require('./router/user.routes')
 const bookRoute=require('./router/book.routes')
 const medRoute=require('./router/medicine.routes')
@@ -29,8 +30,10 @@ globalThis.crypto = {
 const axios = require('axios');
 const { Database } = require("./config/db.config");
 // middlewares 
+
 // Parse application/x-www-form-urlencoded
-app.use(cors())
+app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: true}))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.json());
@@ -38,6 +41,9 @@ app.use(express.static(`${__dirname}/public`));
 // Initialize Mega SDK
 
 app.use(morgan('dev'));
+
+// Socket.IO setup
+
 // Endpoint to handle file stream
 app.get('/get/:fileName', async (req, res) => {
   const { fileName } = req.params;
@@ -71,17 +77,14 @@ app.get('/get/:fileName', async (req, res) => {
   }
 });
 
-// app.use((req,res,next)=>{
-//     setTimeout(next,5000)
-// })
-  
-//Routes
-// app.get('/as',async(req,res)=>{
 
-    
+
 app.get("/", protect,(req,res)=>{
     res.send("Hello world");
 })
+
+
+  
 app.use("/api/v1/users",userRoute);
 app.use("/api/v1/meds",protect,
     medRoute

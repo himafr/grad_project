@@ -136,6 +136,45 @@ class UserController {
    * @returns the user fetched from the database
    */
 
+  static async getAllUser(req, res, next) {
+    const userId = req.user.user_id;
+
+    try {
+      const [users,series]= await UserModel.getAllUsers();
+
+      if (!users)
+        return next(
+          new AppError(
+            `Users are not exist`,
+            STATUS_CODES.NOT_FOUND
+          )
+        );
+      res.status(STATUS_CODES.OK).json({
+        status: "success",
+        message: `successfully fetched users`,
+        data: {
+          users,
+          series,
+        },
+      });
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
+
+  /**
+   * @description
+   * the controller method to update some attributes of a user corresponding to an id
+   * @param {object} req the request object
+   * @param {object} res the response object
+   * @param {object} next the next middleware function in the application’s request-response cycle
+   */
   static async getUserById(req, res, next) {
     const userId = req.user.user_id;
 

@@ -3,8 +3,10 @@ class UserModel {
   static async getAllUsers() {
     try {
       const sql = "SELECT * FROM users";
+      const sql2 = "SELECT role,  DATE_FORMAT(created_at, '%Y-%m') as month,  COUNT(*) as count FROM   users GROUP BY     role, month ORDER BY    month, role;";
       const result = await Database.executeQuery(sql);
-      return result;
+      const series = await Database.executeQuery(sql2);
+      return [result,series];
     } catch (err) {
       console.log(err);
     }
