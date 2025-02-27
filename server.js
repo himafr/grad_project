@@ -1,5 +1,4 @@
 require('dotenv').config();
-const cors=require('cors');
 const http = require('http');  // Importing http module
 const { Database } = require('./config/db.config');
 
@@ -12,15 +11,17 @@ const { Database } = require('./config/db.config');
 
 const socketIo = require('socket.io');
 const app = require('./app');
-app.use(cors());
 
 const serve = http.createServer(app);
 const io = socketIo(serve, {
     cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
+        origin: '*', // Allows requests from any origin
+        methods: ['GET', 'POST'], // Allows GET and POST methods
+        allowedHeaders: ['Authorization', 'Content-Type'], // Allows specific headers
+        credentials: true // Allows credentials (cookies, authorization headers, etc.)
     }
 });
+
 function formatDate(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
