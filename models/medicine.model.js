@@ -38,6 +38,15 @@ class MedsModel {
     return [result[0], review, comments];
   };
 
+  static async getMedData(id) {
+    const sql = "SELECT * FROM meds WHERE pharm_id !=  ?";
+    const sql2 = "SELECT * FROM meds WHERE pharm_id =  ?";
+    const params = [id];
+    const otherMed = await Database.executeQuery(sql, params);
+    const myMed = await Database.executeQuery(sql2, params);
+    return [myMed,otherMed];
+  };
+
   static async createMed(data) {
     try {
       const sql = `INSERT INTO meds SET ?`;

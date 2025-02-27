@@ -202,6 +202,46 @@ class MedController {
 
   /**
    * @description
+   * the controller method to fetch the blog corresponding to a med id
+   * @param {object} req the request object
+   * @param {object} res the response object
+   * @param {object} next the next middleware function in the application’s request-response cycle
+   * @returns the med fetched from the database
+   */
+  static async getMedData(req, res, next) {
+    const medId = req.user.user_id;
+
+    try {
+      const [myMed,otherMed] = await medsModel.getMedData(medId);
+
+      if (!myMed)
+        return next(
+          new AppError(
+            `medicine with id ${myMed} not found`,
+            STATUS_CODES.NOT_FOUND
+          )
+        );
+      return res.status(STATUS_CODES.OK).json({
+        status: "success",
+        message: `medicine with id ${medId} fetched successfully`,
+        data: {
+          myMed,
+          otherMed,
+        },
+      });
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
+
+  /**
+   * @description
    * the controller method to update some attributes of a blog corresponding to an id
    * @param {object} req the request object
    * @param {object} res the response object

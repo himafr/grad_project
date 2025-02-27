@@ -175,6 +175,85 @@ class UserController {
    * @param {object} res the response object
    * @param {object} next the next middleware function in the application’s request-response cycle
    */
+  static async getPatientData(req, res, next) {
+    const userId = req.params.id;
+
+    try {
+      const [bgm,bgm2,bgm3]= await UserModel.getPatientData(userId,3);
+
+      if (!bgm)
+        return next(
+          new AppError(
+            `bgm are not exist`,
+            STATUS_CODES.NOT_FOUND
+          )
+        );
+      res.status(STATUS_CODES.OK).json({
+        status: "success",
+        message: `successfully fetched bgm`,
+        data: {
+          bgm,
+          bgm3,
+          bgm2,
+        },
+      });
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
+
+  /**
+   * @description
+   * the controller method to update some attributes of a user corresponding to an id
+   * @param {object} req the request object
+   * @param {object} res the response object
+   * @param {object} next the next middleware function in the application’s request-response cycle
+   */
+  static async getPatientList(req, res, next) {
+    const userId = req.user.user_id;
+
+    try {
+      const [myPatient,freePatient]= await UserModel.getPatientList(userId);
+
+      if (!freePatient)
+        return next(
+          new AppError(
+            `freePatient are not exist`,
+            STATUS_CODES.NOT_FOUND
+          )
+        );
+      res.status(STATUS_CODES.OK).json({
+        status: "success",
+        message: `successfully fetched freePatient`,
+        data: {
+          freePatient,
+          myPatient,
+        },
+      });
+    } catch (error) {
+      return next(
+        new AppError(
+          error.message || "Internal Server Error",
+          error.status || STATUS_CODES.INTERNAL_SERVER_ERROR,
+          error.response || error
+        )
+      );
+    }
+  }
+
+  /**
+   * @description
+   * the controller method to update some attributes of a user corresponding to an id
+   * @param {object} req the request object
+   * @param {object} res the response object
+   * @param {object} next the next middleware function in the application’s request-response cycle
+   */
   static async getUserById(req, res, next) {
     const userId = req.user.user_id;
 

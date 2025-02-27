@@ -25,6 +25,42 @@ class UserModel {
     }
   }
   
+  static async getPatientData(id,month) {
+    try {
+      const sql = ` SELECT bgm_num FROM user_bgm WHERE MONTH(bgm_date) = ${month} AND YEAR(bgm_date) = YEAR(CURRENT_DATE) AND user_id=?`;
+      const sql2 = ` SELECT bgm_num FROM user_bgm WHERE MONTH(bgm_date) = ${month-1} AND YEAR(bgm_date) = YEAR(CURRENT_DATE) AND user_id=?`;
+
+
+      const sql3 = "SELECT * FROM user_bgm where user_id = ?";
+
+    const params = [id];
+    const result = await Database.executeQuery(sql, params);
+    const result2 = await Database.executeQuery(sql2, params);
+    const result3 = await Database.executeQuery(sql3, params);
+    console.log(id)
+    return [result3, result , result2];
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  
+  static async getPatientList(id) {
+    try {
+      const sql = `SELECT users. * FROM users LEFT JOIN doctor_patient ON users.user_id = doctor_patient.user_id WHERE doctor_patient.user_id IS NULL AND role='patient';`;
+      const sql2=`SELECT users.*
+FROM users
+JOIN doctor_patient ON users.user_id = doctor_patient.user_id
+WHERE doctor_patient.doctor_id = ? ;
+`
+    const params = [id];
+    const result = await Database.executeQuery(sql);
+    const myPatient = await Database.executeQuery(sql2,params);
+    return [myPatient,result];
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  
   static async createReview(data) {
     try {
       const sql = `INSERT INTO user_review SET ?`;

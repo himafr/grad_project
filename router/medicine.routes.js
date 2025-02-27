@@ -6,6 +6,7 @@ const { mega } = require("../middlewares/mega.middleware");
 const router = express.Router();
 router.post("/comments/:id",medController.createComment)
 router.post("/review/:id",medController.createReview)
+router.get("/pharm",medController.getMedData)
 router
   .route("/")
   .get( medController.getAllMeds)

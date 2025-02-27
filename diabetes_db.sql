@@ -29,6 +29,25 @@ CREATE TABLE IF NOT EXISTS user_review(
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+--قياس السكر 
+--blood glucose measurement
+CREATE TABLE IF NOT EXISTS user_bgm(
+    bgm_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    bgm_num Int NOT NULL,
+    bgm_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE 
+);
+
+CREATE TABLE IF NOT EXISTS doctor_patient(
+    having_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    doctor_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ,
+    FOREIGN KEY (doctor_id) REFERENCES users(user_id) ON DELETE CASCADE ,
+    PRIMARY KEY (doctor_id,user_id)
+);
+
 
 
 CREATE TABLE IF NOT EXISTS books(

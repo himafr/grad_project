@@ -13,7 +13,8 @@ router.post('/photo',  authController.protect ,midImg.imgUpload.single("photo"),
     console.log(req.file.buffer)
     next()
 },mg.mega,userController.photo)
-
+router.route('/patient/:id').get(authController.protect, userController.getPatientData)
+router.get('/doctor_new_patient',authController.protect, userController.getPatientList)
 router.get("/",authController.protect,authController.restrictTo("admin"),userController.getAllUser)
 router
 .route("/:id")
