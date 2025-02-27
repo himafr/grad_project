@@ -9,18 +9,27 @@ const { Database } = require('./config/db.config');
 // });
 
 
-const socketIo = require('socket.io');
+const {Server} = require('socket.io');
 const app = require('./app');
 
-const serve = http.createServer(app);
-const io = socketIo(serve, {
+const server = http.createServer(app)
+ const io = new Server(server, {
     cors: {
-        origin: '*', // Allows requests from any origin
-        methods: ['GET', 'POST'], // Allows GET and POST methods
-        allowedHeaders: ['Authorization', 'Content-Type'], // Allows specific headers
-        credentials: true // Allows credentials (cookies, authorization headers, etc.)
+      origin: '*',
+      methods: ["GET", "POST"],
+      // allowedHeaders: ["my-custom-header"],
+      credentials: true
     }
-});
+  })
+// const serve = http.createServer(app);
+// const io = socketIo(serve, {
+//     cors: {
+//         origin: '*', // Allows requests from any origin
+//         methods: ['GET', 'POST'], // Allows GET and POST methods
+//         allowedHeaders: ['Authorization', 'Content-Type'], // Allows specific headers
+//         credentials: true // Allows credentials (cookies, authorization headers, etc.)
+//     }
+// });
 
 function formatDate(date) {
     const year = date.getFullYear();
@@ -51,7 +60,7 @@ io.on('connect', (socket) => {
 
 
 const port = process.env.PORT || 3000;
-serve.listen(port, () => console.log(`Server running on ${port}....`));
+server.listen(port, () => console.log(`Server running on ${port}....`));
 
 // Uncomment for error handling
 // process.on('unhandledRejection', err => {
