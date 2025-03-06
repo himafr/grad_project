@@ -22,13 +22,7 @@ photo VARCHAR(500) DEFAULT 'default_user.jpg',
     address VARCHAR(255) DEFAULT 'not set'
 );
 
-CREATE TABLE IF NOT EXISTS user_review(
-    review_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    review_rating Decimal(2,1) NOT NULL,
-    review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
+
 --قياس السكر 
 --blood glucose measurement
 CREATE TABLE IF NOT EXISTS user_bgm(
@@ -63,8 +57,9 @@ CREATE TABLE IF NOT EXISTS books(
 );
 
 CREATE TABLE IF NOT EXISTS book_review(
-    review_rating Decimal(2,1) NOT NULL,
+ review_rating DECIMAL(3,1) CHECK (review_rating <= 5),
     review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    review_content VARCHAR(2000) NOT NULL,
     user_id INT NOT NULL,
     book_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
@@ -72,15 +67,6 @@ CREATE TABLE IF NOT EXISTS book_review(
     PRIMARY KEY (user_id,book_id)
 );
 
-CREATE TABLE IF NOT EXISTS book_comments(
-    comment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    comment_content VARCHAR(2000)not NULL,
-    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INT NOT NULL,
-    book_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (book_id) REFERENCES books(book_id)
-);
 
 CREATE TABLE IF NOT EXISTS meds(
     med_id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -95,8 +81,9 @@ CREATE TABLE IF NOT EXISTS meds(
 );
 
 CREATE TABLE IF NOT EXISTS med_review(
-    review_rating Decimal(2,1) NOT NULL,
+ review_rating DECIMAL(3,1) CHECK (review_rating <= 5),
     review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    review_content VARCHAR(2000) NOT NULL,
     user_id INT NOT NULL,
     med_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ,
@@ -104,15 +91,7 @@ CREATE TABLE IF NOT EXISTS med_review(
     PRIMARY KEY (med_id,user_id)
 );
 
-CREATE TABLE IF NOT EXISTS med_comments(
-    comment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    comment_content VARCHAR(2000)not NULL,
-    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INT NOT NULL,
-    med_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (med_id) REFERENCES meds(med_id)
-);
+
 
 
 
@@ -136,23 +115,14 @@ CREATE TABLE IF NOT EXISTS recipes (
 
 
 CREATE TABLE IF NOT EXISTS recipe_review(
-    review_rating Decimal(2,1) NOT NULL,
+ review_rating DECIMAL(3,1) CHECK (review_rating <= 5),
     review_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    review_content VARCHAR(2000) NOT NULL,
     user_id INT NOT NULL,
     recipe_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id) ON DELETE CASCADE,
     PRIMARY KEY (recipe_id,user_id)
-);
-
-CREATE TABLE IF NOT EXISTS recipe_comments(
-    comment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    comment_content VARCHAR(2000)not NULL,
-    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INT NOT NULL,
-    recipe_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
 );
 
 

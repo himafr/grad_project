@@ -4,7 +4,6 @@ const recipeMaker = require("../middlewares/img.uploader.middleware");
 const authController = require("../controllers/auth.controller");
 const { mega } = require("../middlewares/mega.middleware");
 const router = express.Router();
-router.post("/comments/:id",RecipeController.createComment)
 router.post("/review/:id",RecipeController.createReview)
 router.get("/apk",RecipeController.getAllRecipesApk)
 router

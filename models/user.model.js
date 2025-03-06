@@ -14,12 +14,10 @@ class UserModel {
   static async getUserById(id) {
     try {
       const sql = "SELECT * FROM users where user_id=?";
-      const reviewsSql = "SELECT * FROM user_review INNER JOIN users ON users.user_id=user_review.user_id WHERE users.user_id = ?";
     const params = [id];
     const result = await Database.executeQuery(sql, params);
-    const review = await Database.executeQuery(reviewsSql, params);
     console.log(id)
-    return [result[0], review ];
+    return result[0];
     } catch (err) {
       console.log(err);
     }
@@ -28,10 +26,10 @@ class UserModel {
   static async getPatientData(id,month) {
     try {
       const sql = ` SELECT bgm_num FROM user_bgm WHERE MONTH(bgm_date) = ${month} AND YEAR(bgm_date) = YEAR(CURRENT_DATE) AND user_id=?`;
-      const sql2 = ` SELECT bgm_num FROM user_bgm WHERE MONTH(bgm_date) = ${month-1} AND YEAR(bgm_date) = YEAR(CURRENT_DATE) AND user_id=?`;
+      const sql2 = ` SELECT bgm_num FROM user_bgm WHERE MONTH(bgm_date) = ${month -1} AND YEAR(bgm_date) = YEAR(CURRENT_DATE) AND user_id=?`;
 
 
-      const sql3 = "SELECT * FROM user_bgm where user_id = ?";
+      const sql3 = `SELECT * FROM user_bgm   WHERE MONTH(bgm_date) = ${month} AND user_id = ? `;
 
     const params = [id];
     const result = await Database.executeQuery(sql, params);
